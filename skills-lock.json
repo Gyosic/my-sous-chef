@@ -6,10 +6,20 @@
       "sourceType": "github",
       "computedHash": "2f04fe7900baaecfdc63a978cb18239a1ba987497d7c6b85e578622ed6ea82b9"
     },
+    "shadcn-ui": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "computedHash": "dadbca54d35a33fe73e40018611af2179689305bf6da812ab2643987fefd9da3"
+    },
     "speech-to-text": {
       "source": "elevenlabs/skills",
       "sourceType": "github",
       "computedHash": "bcb005567f41385e5dcba25d84de8d8ae10b65930a154146750c7004d103762b"
+    },
+    "tailwindcss-mobile-first": {
+      "source": "josiahsiegel/claude-plugin-marketplace",
+      "sourceType": "github",
+      "computedHash": "e7eae643c341b3aa2b645cf8425842ba1893735c48ca40d24429a866a9dbee9e"
     },
     "text-to-speech": {
       "source": "elevenlabs/skills",
