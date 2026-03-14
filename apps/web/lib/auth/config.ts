@@ -15,7 +15,7 @@ export interface Credentials {
 const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
 
 const authConfig: NextAuthConfig = {
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 60 * 60 * 24 },
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
@@ -36,7 +36,6 @@ const authConfig: NextAuthConfig = {
         id: token.id,
         email: token.email,
         name: token.name,
-        role: token.role,
       })
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
