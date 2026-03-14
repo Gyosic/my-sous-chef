@@ -26,27 +26,25 @@ export function SigninForm() {
       : "/icons/naver-icon-green.png";
 
   return (
-    
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl">Welcome!</CardTitle>
-            <CardDescription>소셜 로그인으로 빠르게 시작하세요</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <GoogleButton
-              type="button"
-              text="구글로 시작하기"
-              variant="outline"
-              onClick={() => oauthSignin("google")}
-            />
-            <NaverButton
-              type="button"
-              text="네이버로 시작하기"
-              onClick={() => oauthSignin("naver")}
-              buttonImg={naverImgSrc}
-            />
-          </CardContent>
-        </Card>
-    
+    <Card>
+      <CardHeader className="text-center">
+        <CardTitle className="text-xl">Welcome!</CardTitle>
+        <CardDescription>소셜 로그인으로 빠르게 시작하세요</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <GoogleButton
+          type="button"
+          text="구글로 시작하기"
+          variant="outline"
+          onClick={() => oauthSignin("google")}
+        />
+        <NaverButton
+          type="button"
+          text="네이버로 시작하기"
+          onClick={() => oauthSignin("naver")}
+          buttonImg={naverImgSrc}
+        />
+      </CardContent>
+    </Card>
   );
 }

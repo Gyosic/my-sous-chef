@@ -20,10 +20,7 @@ const authConfig: NextAuthConfig = {
     usersTable: users,
     accountsTable: accounts,
   }),
-  providers: [
-    Google({}),
-    Naver({}),
-  ],
+  providers: [Google({}), Naver({})],
   pages: {
     signIn: "/",
     signOut: "/signout",
