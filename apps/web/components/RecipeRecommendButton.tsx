@@ -7,14 +7,12 @@ interface RecipeRecommendButtonProps {
   onClick?: () => void;
 }
 
-export function RecipeRecommendButton({
-  onClick,
-}: RecipeRecommendButtonProps) {
+export function RecipeRecommendButton({ onClick }: RecipeRecommendButtonProps) {
   return (
     <Button
       size="lg"
       onClick={onClick}
-      className="h-[50px] w-full gap-2 rounded-xl text-[15px] font-semibold"
+      className="h-12.5 w-full gap-2 rounded-xl text-[15px] font-semibold"
     >
       <ChefHat className="size-5" />
       레시피 추천받기

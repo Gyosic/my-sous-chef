@@ -34,7 +34,7 @@ const categories: Category[] = [
   {
     emoji: "🍚",
     name: "주식 · 면",
-    chips: ["밥", "라면", "파스타", "우동", "떡", "식빵"],
+    chips: ["밥", "라면", "파스타면", "우동면", "떡", "식빵", "소면"],
   },
 ];
 
@@ -61,9 +61,9 @@ export function CategorySection({ onChipClick }: CategorySectionProps) {
           >
             <div className="overflow-hidden rounded-[14px] bg-muted/50">
               <CollapsibleTrigger asChild>
-                <button
+                <Button
                   type="button"
-                  className="flex h-12 w-full items-center justify-between px-3.5"
+                  className="flex h-12 w-full items-center justify-between px-3.5 bg-transparent"
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{category.emoji}</span>
@@ -72,11 +72,11 @@ export function CategorySection({ onChipClick }: CategorySectionProps) {
                     </span>
                   </div>
                   {isOpen ? (
-                    <ChevronUp className="size-[18px] text-muted-foreground" />
+                    <ChevronUp className="size-4.5 text-muted-foreground" />
                   ) : (
-                    <ChevronDown className="size-[18px] text-muted-foreground" />
+                    <ChevronDown className="size-4.5 text-muted-foreground" />
                   )}
-                </button>
+                </Button>
               </CollapsibleTrigger>
 
               <CollapsibleContent>
@@ -84,10 +84,11 @@ export function CategorySection({ onChipClick }: CategorySectionProps) {
                   {category.chips.map((chip) => (
                     <Button
                       key={chip}
+                      type="button"
                       variant="outline"
                       size="sm"
                       onClick={() => onChipClick?.(chip)}
-                      className="h-[30px] rounded-full px-2.5 text-xs font-medium"
+                      className="h-7.5 rounded-full px-2.5 text-xs font-medium"
                     >
                       {chip}
                     </Button>

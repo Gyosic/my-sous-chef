@@ -7,11 +7,9 @@ export class RecommendsService {
   constructor(private aiService: AiService) {}
 
   async recommendRecipe(query: RecommendType) {
-    const ingredients = query.ingredients.split(",").map((i) => i.trim());
-
     return this.aiService.generateRecipe(
       query.model,
-      ingredients,
+      query.ingredients,
       query.prompt ?? "",
     );
   }

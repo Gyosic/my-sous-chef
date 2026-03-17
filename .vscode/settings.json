@@ -15,5 +15,15 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "js/ts.preferences.includePackageJsonAutoImports": "on",
+  "js/ts.tsserver.experimental.enableProjectDiagnostics": false,
+  "js/ts.preferences.autoImportFileExcludePatterns": [
+    "**/node_modules/@types/react/index.d.ts"
+  ],
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.turbo/**": true,
+    "**/.next/**": true
   }
 }
