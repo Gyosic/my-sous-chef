@@ -1,8 +1,14 @@
 "use client";
 
-import type { ControllerFieldState, ControllerRenderProps, FieldPath, FieldValues } from "react-hook-form";
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from "react-hook-form";
 import { PasswordField } from "./fields/PasswordField";
 import { TextField } from "./fields/TextField";
+import { TagField } from "./fields/TagField";
 
 export interface FieldModel {
   name: string;
@@ -23,7 +29,10 @@ export interface FieldModel {
   [key: string]: unknown;
 }
 
-export interface TemplateFormItemProps<T extends FieldValues, K extends FieldPath<T>> {
+export interface TemplateFormItemProps<
+  T extends FieldValues,
+  K extends FieldPath<T>,
+> {
   fieldModel: FieldModel;
   field: ControllerRenderProps<T, K>;
   fieldState: ControllerFieldState;
@@ -41,6 +50,8 @@ export function TemplateFormItem<T extends FieldValues, K extends FieldPath<T>>(
   switch (props.fieldModel.type) {
     case "password":
       return <PasswordField {...props} />;
+    case "tag":
+      return <TagField {...props} />;
     default:
       return <TextField {...props} />;
   }

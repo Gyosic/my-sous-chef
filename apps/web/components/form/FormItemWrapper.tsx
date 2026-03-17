@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import type { LucideIcon } from 'lucide-react';
-import { createElement } from 'react';
+import type { LucideIcon } from "lucide-react";
+import { createElement } from "react";
 
-import { useDynamicIcon } from '@repo/ui/hooks/use-lucide-icon';
-import { cn } from '@repo/ui/lib/utils';
+import { useDynamicIcon } from "@repo/ui/hooks/use-lucide-icon";
+import { cn } from "@repo/ui/lib/utils";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from '@repo/ui/components/field';
-import { ControllerFieldState } from 'react-hook-form';
+} from "@repo/ui/components/field";
+import { ControllerFieldState } from "react-hook-form";
 
 interface FormItemWrapperProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ interface FormItemWrapperProps {
   className?: string;
   formLabel?: React.ReactNode;
   icon?: LucideIcon | string;
-  fieldState: ControllerFieldState
+  fieldState: ControllerFieldState;
 }
 
 export function FormItemWrapper({
@@ -47,7 +47,7 @@ export function FormItemWrapper({
       ) : (
         <FieldLabel className={cn(labelCls)}>
           {iconComponent &&
-            createElement(iconComponent, { className: 'size-4' })}{' '}
+            createElement(iconComponent, { className: "size-4" })}{" "}
           {name}
         </FieldLabel>
       )}
