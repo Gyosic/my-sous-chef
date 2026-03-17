@@ -1,7 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import Anthropic from "@anthropic-ai/sdk";
-import { AiProvider, AiRecipeResponse } from "../ai.interface";
+import {
+  AiProvider,
+  AiRecipeResponse,
+  ConversationMessage,
+} from "../ai.interface";
 
 @Injectable()
 export class ClaudeProvider implements AiProvider {
@@ -34,6 +38,36 @@ export class ClaudeProvider implements AiProvider {
     const recipes: AiRecipeResponse = JSON.parse(text);
 
     return recipes;
+  }
+
+  async *streamCookingGuidance(
+    systemPrompt: string,
+    conversationHistory: ConversationMessage[],
+    userMessage: string,
+  ): AsyncGenerator<string, void, unknown> {
+    const messages: Anthropic.MessageParam[] = [
+      ...conversationHistory.map((msg) => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content,
+      })),
+      { role: "user" as const, content: userMessage },
+    ];
+
+    const stream = this.client.messages.stream({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages,
+    });
+
+    for await (const event of stream) {
+      if (
+        event.type === "content_block_delta" &&
+        event.delta.type === "text_delta"
+      ) {
+        yield event.delta.text;
+      }
+    }
   }
 
   private buildPrompt(ingredients: string[], prompt: string): string {

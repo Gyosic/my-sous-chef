@@ -29,9 +29,6 @@ const authConfig: NextAuthConfig = {
   },
   callbacks: {
     jwt: async ({ token }) => {
-      return token;
-    },
-    session: async ({ session, token }) => {
       const access_token = await new SignJWT({
         sub: token.sub,
         id: token.id,
@@ -43,7 +40,10 @@ const authConfig: NextAuthConfig = {
         .setExpirationTime("1d")
         .sign(secret);
 
-      return Object.assign(session, { access_token });
+      return { ...token, access_token };
+    },
+    session: async ({ session, token }) => {
+      return Object.assign(session, { user: token });
     },
     signIn: async ({ user }): Promise<boolean> => Boolean(user.id),
     authorized: async ({ auth }): Promise<boolean> => Boolean(auth),
