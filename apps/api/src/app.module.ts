@@ -5,11 +5,13 @@ import { ConfigModule } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
 import { DatabaseModule } from "database/database.module";
 import { RecommendsModule } from "./recommends/recommends.module";
+import { AiModule } from "./ai/ai.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
+    AiModule,
     UsersModule,
     RecommendsModule,
   ],

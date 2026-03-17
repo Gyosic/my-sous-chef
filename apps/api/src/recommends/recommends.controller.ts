@@ -3,7 +3,7 @@ import { RecommendsService } from "./recommends.service";
 import { recommendSchema, type RecommendType } from "./dto/recommend.dto";
 import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
 
-@Controller("recommends")
+@Controller("/api/recommends")
 export class RecommendsController {
   constructor(private readonly recommendsService: RecommendsService) {}
 

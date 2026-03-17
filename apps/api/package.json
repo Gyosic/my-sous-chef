@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.79.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
@@ -29,6 +30,7 @@
     "@repo/db": "workspace:^",
     "drizzle-orm": "^0.45.1",
     "jose": "^6.2.1",
+    "openai": "^6.31.0",
     "postgres": "^3.4.7",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
