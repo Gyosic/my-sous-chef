@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { recommendSchema } from "@repo/db/types/recommend";
+import { useRouter } from "next/navigation";
+import { useRecipeStore } from "@/lib/store/recipes";
 
 const queryClient = new QueryClient();
 interface HomeContentProps {
@@ -15,6 +17,8 @@ interface HomeContentProps {
 }
 
 export function HomeContent({ userName, baseurl }: HomeContentProps) {
+  const router = useRouter();
+  const { setRecipes } = useRecipeStore();
   const form = useForm<UseFormReturn>({
     resolver: zodResolver(recommendSchema),
     mode: "onBlur",
@@ -24,7 +28,15 @@ export function HomeContent({ userName, baseurl }: HomeContentProps) {
   const { handleSubmit } = form;
 
   const onSubmit = handleSubmit(async (inputs) => {
-    console.info(inputs);
+    const params = new URLSearchParams();
+    params.set("ingredients", inputs.ingredients.join(","));
+    if (inputs.model) params.set("model", inputs.model);
+
+    const res = await fetch(`${baseurl}/api/recommends?${params}`);
+    const data = await res.json();
+    setRecipes(data.recipes);
+
+    router.push(`/recipes`);
   });
 
   const onChipClick = (chip) => {

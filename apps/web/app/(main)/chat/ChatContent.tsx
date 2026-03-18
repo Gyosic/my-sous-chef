@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChatBubble } from "@/components/ChatBubble";
 import { ChatInput } from "@/components/ChatInput";
+import { useRecipeStore } from "@/lib/store/recipes";
 
 interface Message {
   id: string;
@@ -10,20 +11,16 @@ interface Message {
   content: React.ReactNode;
 }
 
-interface ChatContentProps {
-  recipeId: string;
-  recipeName: string;
-}
-
-export function ChatContent({ recipeId, recipeName }: ChatContentProps) {
+export function ChatContent() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { currentRecipe } = useRecipeStore();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       type: "ai",
       content: (
         <div className="flex flex-col gap-2.5">
-          <p>{recipeName} 레시피를 안내해드릴게요! 😊</p>
+          <p>{currentRecipe?.name} 레시피를 안내해드릴게요! 😊</p>
           <div className="flex flex-col gap-1.5 rounded-[10px] bg-white p-2.5">
             <div className="flex items-center gap-1">
               <span className="flex size-5 items-center justify-center rounded-full bg-foreground text-[11px] font-semibold text-background">
@@ -34,8 +31,7 @@ export function ChatContent({ recipeId, recipeName }: ChatContentProps) {
               </span>
             </div>
             <p className="text-[13px] leading-[1.45] text-muted-foreground">
-              두부 1/2모, 달걀 2개, 파 1대를 준비해주세요. 두부는 한 입 크기로
-              썰어주세요.
+              {currentRecipe?.steps[0]}
             </p>
           </div>
         </div>

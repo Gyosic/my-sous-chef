@@ -22,6 +22,9 @@ export interface AiRecipeResponse {
     description: string;
     steps: string[];
     ingredients: string[];
+    time: string;
+    difficulty: string;
+    matchRate: number;
   }[];
 }
 

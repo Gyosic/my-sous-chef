@@ -72,9 +72,9 @@ export class OpenAiProvider implements AiProvider {
 사용자가 가진 재료: ${ingredients.join(", ")}
 ${prompt ? `추가 요청: ${prompt}` : ""}
 
-이 재료로 만들 수 있는 레시피 1개를 추천해주세요.
+이 재료로 만들 수 있는 레시피 3개를 추천해주세요.
 steps는 최대한 상세하게, 요리 초보자도 쉽게 따라할 수 있게 설명해주세요.
 반드시 아래 JSON 형식으로만 응답하세요:
-{"recipes": [{"name": "요리명", "description": "간단한 설명", "steps": ["1단계", "2단계"], "ingredients": ["재료1", "재료2"]}]}`;
+{"recipes": [{"name": "요리명", "description": "간단한 설명", "steps": ["1단계", "2단계"], "ingredients": ["재료1", "재료2"], "time": "예상소요시간", "difficulty": "난이도(쉬움|보통|어려움)", "matchRate": "재료매칭률(숫자만)"}]}`;
   }
 }

@@ -24,6 +24,17 @@
   "files.watcherExclude": {
     "**/node_modules/**": true,
     "**/.turbo/**": true,
-    "**/.next/**": true
-  }
+    "**/.next/**": true,
+    "**/dist/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.turbo": true,
+    "**/.next": true,
+    "**/dist": true
+  },
+  "typescript.tsserver.watchOptions": {
+    "excludeDirectories": ["**/node_modules", "**/.next", "**/dist"]
+  },
+  "typescript.tsserver.maxTsServerMemory": 4096
 }
