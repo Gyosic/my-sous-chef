@@ -19,7 +19,7 @@ export function TopBar({ title }: TopBarProps) {
         onClick={() => router.back()}
         aria-label="뒤로가기"
       >
-        <ArrowLeft className="size-[22px] text-foreground" />
+        <ArrowLeft className="size-5.5 text-foreground" />
       </Button>
       <span className="text-base font-semibold text-foreground">{title}</span>
     </header>

@@ -2,13 +2,16 @@
 
 import { IngredientInput } from "@/components/IngredientInput";
 import { CategorySection } from "@/components/CategorySection";
-import { RecipeRecommendButton } from "@/components/RecipeRecommendButton";
+import { RecipeRecommendButton } from "@/components/recipes/RecipeRecommendButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { recommendSchema } from "@repo/db/types/recommend";
+import { recommendSchema, type RecommendInput } from "@repo/db/types/recommend";
 import { useRouter } from "next/navigation";
-import { useRecipeStore } from "@/lib/store/recipes";
+import { useRecipeStore } from "@/hooks/use-recipes-store";
+import { RecipeLoading } from "@/components/recipes/RecipeLoading";
+import { toast } from "@repo/ui/components/sonner";
+import { useState } from "react";
 
 const queryClient = new QueryClient();
 interface HomeContentProps {
@@ -19,27 +22,36 @@ interface HomeContentProps {
 export function HomeContent({ userName, baseurl }: HomeContentProps) {
   const router = useRouter();
   const { setRecipes } = useRecipeStore();
-  const form = useForm<UseFormReturn>({
+  const form = useForm<RecommendInput>({
     resolver: zodResolver(recommendSchema),
-    mode: "onBlur",
+    mode: "onSubmit",
     defaultValues: { ingredients: [], model: "openai" },
   });
+  const [loading, setLoading] = useState(false);
 
   const { handleSubmit } = form;
 
   const onSubmit = handleSubmit(async (inputs) => {
-    const params = new URLSearchParams();
-    params.set("ingredients", inputs.ingredients.join(","));
-    if (inputs.model) params.set("model", inputs.model);
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      params.set("ingredients", inputs.ingredients.join(","));
+      if (inputs.model) params.set("model", inputs.model);
 
-    const res = await fetch(`${baseurl}/api/recommends?${params}`);
-    const data = await res.json();
-    setRecipes(data.recipes);
-
-    router.push(`/recipes`);
+      const res = await fetch(`${baseurl}/api/recommends?${params}`);
+      const { recipes } = await res.json();
+      setRecipes(recipes);
+    } catch (err) {
+      toast.error("[오류]", {
+        description: (err as Error)?.message ?? "알수없는 요류 발생.",
+      });
+    } finally {
+      setLoading(false);
+      router.push(`/recipes`);
+    }
   });
 
-  const onChipClick = (chip) => {
+  const onChipClick = (chip: string) => {
     const ingredients = form.getValues("ingredients");
 
     if (!ingredients.includes(chip)) ingredients.push(chip);
@@ -73,6 +85,8 @@ export function HomeContent({ userName, baseurl }: HomeContentProps) {
           <CategorySection onChipClick={onChipClick} />
         </form>
       </div>
+
+      {loading && <RecipeLoading ingredients={form.getValues("ingredients")} />}
     </QueryClientProvider>
   );
 }
