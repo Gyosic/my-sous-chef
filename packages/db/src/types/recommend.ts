@@ -6,4 +6,5 @@ export const recommendSchema = z.object({
   prompt: z.string().optional(),
 });
 
-export type RecommendType = z.infer<typeof recommendSchema>;
+export type RecommendInput = z.input<typeof recommendSchema>;
+export type RecommendType = z.output<typeof recommendSchema>;

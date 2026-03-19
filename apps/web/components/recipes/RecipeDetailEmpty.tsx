@@ -8,7 +8,7 @@ export function RecipeDetailEmpty() {
   const router = useRouter();
 
   return (
-    <div className="flex h-svh flex-col bg-white">
+    <div className="flex h-full flex-col bg-white">
       <div className="flex flex-1 flex-col items-center justify-center gap-5">
         <div className="flex size-20 items-center justify-center rounded-full bg-muted/50">
           <BookOpen className="size-9 text-neutral-300" />

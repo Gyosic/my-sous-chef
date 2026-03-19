@@ -1,7 +1,7 @@
 import { Clock, ImageIcon } from "lucide-react";
 import { Badge } from "@repo/ui/components/badge";
 import { useRouter } from "next/navigation";
-import { useRecipeStore, type RecipeState } from "@/lib/store/recipes";
+import { RecipeState, useRecipeStore } from "@/hooks/use-recipes-store";
 
 function getDifficultyColor(difficulty: string) {
   switch (difficulty) {
@@ -26,7 +26,7 @@ export function RecipeCard(recipe: RecipeState) {
   const router = useRouter();
   const { setCurrentRecipe } = useRecipeStore();
   const handleClick = () => {
-    router.push("chat");
+    router.push("/recipes/detail");
     setCurrentRecipe(recipe);
   };
 
@@ -44,7 +44,7 @@ export function RecipeCard(recipe: RecipeState) {
             {recipe.name}
           </span>
           <Badge
-            className={`h-[22px] rounded-full px-2 text-[11px] font-semibold ${getMatchBadgeStyle(recipe.matchRate)}`}
+            className={`h-5.5 rounded-full px-2 text-[11px] font-semibold ${getMatchBadgeStyle(recipe.matchRate)}`}
           >
             {recipe.matchRate}%
           </Badge>

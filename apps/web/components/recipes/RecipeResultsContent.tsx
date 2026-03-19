@@ -1,13 +1,13 @@
 "use client";
 
-import { RecipeCard } from "@/components/RecipeCard";
-import { useRecipeStore } from "@/lib/store/recipes";
+import { RecipeCard } from "@/components/recipes/RecipeCard";
+import { useRecipeStore } from "@/hooks/use-recipes-store";
 
 export function RecipeResultsContent() {
   const { recipes } = useRecipeStore();
 
   return (
-    <div className="flex-1 overflow-y-auto p-5">
+    <div className="overflow-y-auto p-5">
       <div className="flex flex-col gap-5">
         {/* Match Info */}
         <div className="flex flex-col gap-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import { RecommendType } from "@repo/db/types/recommend";
+import { type RecommendInput } from "@repo/db/types/recommend";
 import { FieldGroup } from "@repo/ui/components/field";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { TemplateFormItem } from "@/components/form/TemplateFormItem";
@@ -14,7 +14,7 @@ const recommandModel = {
 };
 
 interface IngredientInputProps {
-  form: UseFormReturn;
+  form: UseFormReturn<RecommendInput>;
 }
 
 export function IngredientInput({ form }: IngredientInputProps) {
@@ -26,7 +26,7 @@ export function IngredientInput({ form }: IngredientInputProps) {
           {Object.entries(recommandModel).map(([key, fieldModel]) => (
             <Controller
               key={key}
-              name={key as keyof RecommendType}
+              name={key as keyof RecommendInput}
               control={form.control}
               render={({ field, fieldState }) => (
                 <TemplateFormItem
