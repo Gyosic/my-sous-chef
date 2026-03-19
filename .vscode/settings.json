@@ -16,11 +16,9 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "js/ts.preferences.includePackageJsonAutoImports": "on",
+  "js/ts.preferences.includePackageJsonAutoImports": "auto",
   "js/ts.tsserver.experimental.enableProjectDiagnostics": false,
-  "js/ts.preferences.autoImportFileExcludePatterns": [
-    "**/node_modules/@types/react/index.d.ts"
-  ],
+  "js/ts.preferences.autoImportFileExcludePatterns": [],
   "files.watcherExclude": {
     "**/node_modules/**": true,
     "**/.turbo/**": true,
@@ -33,8 +31,9 @@
     "**/.next": true,
     "**/dist": true
   },
-  "typescript.tsserver.watchOptions": {
+  "js/ts.tsserver.watchOptions": {
     "excludeDirectories": ["**/node_modules", "**/.next", "**/dist"]
   },
-  "typescript.tsserver.maxTsServerMemory": 4096
+  "js/ts.preferences.importModuleSpecifier": "non-relative",
+  "js/ts.tsserver.maxTsServerMemory": 4096
 }

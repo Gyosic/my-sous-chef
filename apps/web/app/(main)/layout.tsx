@@ -13,7 +13,7 @@ export default async function MainLayout({
   return (
     <div className="flex h-svh flex-col bg-white">
       <Appbar user={user} />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <main className="relative flex-1 overflow-y-auto">{children}</main>
       <BottomNav isLoggedIn={!!user} />
     </div>
   );
