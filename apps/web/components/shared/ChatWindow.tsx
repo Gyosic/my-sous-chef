@@ -19,8 +19,18 @@ export function ChatWindow({ variant = "floating" }: ChatWindowProps) {
   const closeChat = useChatStore((s) => s.closeChat);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const { messages, currentAiResponse, sendText, sessionId } =
-    useCookingSessionContext();
+  const {
+    messages,
+    currentAiResponse,
+    sendText,
+    sessionId,
+    isPlaying,
+    isListening,
+    isRecording,
+    volumeLevel,
+    recorderError,
+    toggleListening,
+  } = useCookingSessionContext();
 
   const isLoading = !!currentAiResponse;
 
@@ -82,7 +92,21 @@ export function ChatWindow({ variant = "floating" }: ChatWindowProps) {
         </div>
       </div>
 
-      {/* Input */}
+      {/* Voice Control */}
+      {sessionId && (
+        <div className="border-t px-4 py-3">
+          <VoiceControl
+            isListening={isListening}
+            isRecording={isRecording}
+            isAiSpeaking={isPlaying}
+            volumeLevel={volumeLevel}
+            error={recorderError}
+            onToggleListening={toggleListening}
+          />
+        </div>
+      )}
+
+      {/* Text Input */}
       <ChatInput
         isLoading={isLoading}
         onSend={handleSend}
