@@ -9,6 +9,10 @@ import { RecipeDetailEmpty } from "@/components/recipes/RecipeDetailEmpty";
 import { useRecipeStore } from "@/hooks/use-recipes-store";
 import { ChatBot } from "@/components/shared/ChatBot";
 import { useElapsedTime } from "@/hooks/use-elapsed-time";
+import {
+  CookingSessionProvider,
+  useCookingSessionContext,
+} from "@/components/provider/CookingSessionProvider";
 
 function getDifficultyStyle(difficulty: string) {
   switch (difficulty) {
@@ -25,16 +29,38 @@ function getDifficultyStyle(difficulty: string) {
 
 export function RecipeDetail() {
   const { currentRecipe: recipe } = useRecipeStore();
-  const [aiStarted, setAiStarted] = useState(false);
-  const { formatted } = useElapsedTime(aiStarted);
 
   if (!recipe) return <RecipeDetailEmpty />;
 
+  return (
+    <CookingSessionProvider>
+      <RecipeDetailInner />
+    </CookingSessionProvider>
+  );
+}
+
+function RecipeDetailInner() {
+  const { currentRecipe: recipe } = useRecipeStore();
+  const [aiStarted, setAiStarted] = useState(false);
+  const { formatted } = useElapsedTime(aiStarted);
+  const { startSession, endSession, isConnected } =
+    useCookingSessionContext();
+
+  if (!recipe) return null;
+
   const startAi = () => {
     if (!aiStarted) {
+      startSession(recipe.id, {
+        name: recipe.name,
+        description: recipe.description,
+        steps: recipe.steps.map((s) => `${s.title}: ${s.description}`),
+        ingredients: recipe.ingredients.map(
+          (i) => `${i.name} ${i.amount}`,
+        ),
+      });
       setAiStarted(true);
     } else {
-      // 종료 메시지 확인시 => ai 연결 close
+      endSession();
       setAiStarted(false);
     }
   };
@@ -156,6 +182,7 @@ export function RecipeDetail() {
         <Button
           size="lg"
           onClick={startAi}
+          disabled={!aiStarted && !isConnected}
           className="h-12.5 flex-1 gap-2 rounded-xl text-[15px] font-semibold"
         >
           <ChefHat className="size-5" />

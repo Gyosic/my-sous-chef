@@ -1,70 +1,39 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
 import { ChefHat, X } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
-
-import { useChatStore } from "@/hooks/use-chat-store";
-import { ChatInput } from "./ChatInput";
-import { ChatMessage } from "./ChatMessage";
+import { useCallback, useEffect, useRef } from "react";
 import { Button } from "@repo/ui/components/button";
+import { useChatStore } from "@/hooks/use-chat-store";
+import { useCookingSessionContext } from "@/components/provider/CookingSessionProvider";
+import { VoiceControl } from "@/components/cooking/VoiceControl";
+import { ChatInput } from "./ChatInput";
+import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface ChatWindowProps {
   variant?: "inline" | "floating";
-  welcomeMessage?: string;
 }
 
 export function ChatWindow({ variant = "floating" }: ChatWindowProps) {
   const closeChat = useChatStore((s) => s.closeChat);
-  const setMessages = useChatStore((s) => s.setMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const [rateLimited, setRateLimited] = useState(false);
 
-  const transport = new DefaultChatTransport({ api: "/api/chat" });
+  const { messages, currentAiResponse, sendText, sessionId } =
+    useCookingSessionContext();
 
-  const initialMessage = [
-    {
-      id: "welcome",
-      role: "assistant" as const,
-      parts: [
-        {
-          type: "text" as const,
-          text: "안녕하세요! 무엇을 도와드릴까요?",
-        },
-      ],
-    },
-  ];
-  const { messages, sendMessage, status, error } = useChat({
-    transport,
-    messages: initialMessage,
-  });
-
-  useEffect(() => {
-    setMessages(messages);
-  }, [messages, setMessages]);
-
-  const isLoading = status === "submitted" || status === "streaming";
-
-  useEffect(() => {
-    if (
-      error?.message?.includes("429") ||
-      error?.message?.includes("Too many")
-    ) {
-      setRateLimited(true);
-    }
-  }, [error]);
+  const isLoading = !!currentAiResponse;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, currentAiResponse]);
 
   const handleSend = useCallback(
     (text: string) => {
-      if (!text.trim() || isLoading || rateLimited) return;
-      sendMessage({ text });
+      if (!text.trim() || !sessionId) return;
+      sendText(text);
     },
-    [isLoading, rateLimited, sendMessage],
+    [sessionId, sendText],
   );
 
   return (
@@ -97,21 +66,16 @@ export function ChatWindow({ variant = "floating" }: ChatWindowProps) {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4">
         <div className="flex flex-col gap-3">
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
+          {messages.map((msg, i) => (
+            <MessageBubble key={i} role={msg.role} content={msg.content} />
           ))}
-          {status === "submitted" && (
-            <div className="flex items-center gap-2">
-              <div className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">
-                <ChefHat className="size-4" />
-              </div>
-              <div className="rounded-2xl bg-muted px-3 py-2">
-                <div className="flex gap-1">
-                  <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0ms]" />
-                  <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
-                  <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
-                </div>
-              </div>
+          {currentAiResponse && (
+            <MessageBubble role="assistant" content={currentAiResponse} />
+          )}
+          {!sessionId && messages.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-8 text-center text-sm text-muted-foreground">
+              <ChefHat className="mb-2 size-8 text-muted-foreground/50" />
+              <p>연결 중...</p>
             </div>
           )}
           <div ref={bottomRef} />
@@ -119,7 +83,54 @@ export function ChatWindow({ variant = "floating" }: ChatWindowProps) {
       </div>
 
       {/* Input */}
-      <ChatInput isLoading={isLoading} onSend={handleSend} />
+      <ChatInput
+        isLoading={isLoading}
+        onSend={handleSend}
+        placeholder={
+          sessionId ? "텍스트로 질문하기..." : "세션 연결 대기중..."
+        }
+      />
+    </div>
+  );
+}
+
+function MessageBubble({
+  role,
+  content,
+}: {
+  role: "user" | "assistant";
+  content: string;
+}) {
+  const isUser = role === "user";
+
+  return (
+    <div
+      className={cn(
+        "flex w-full gap-2 items-center",
+        isUser ? "justify-end" : "justify-start",
+      )}
+    >
+      {!isUser && (
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">
+          <ChefHat className="size-3.5" />
+        </div>
+      )}
+      <div
+        className={cn(
+          "max-w-[80%] rounded-2xl px-3 py-2 text-sm",
+          isUser
+            ? "bg-primary text-primary-foreground"
+            : "bg-muted text-muted-foreground",
+        )}
+      >
+        {isUser ? (
+          <p className="whitespace-pre-wrap">{content}</p>
+        ) : (
+          <div className="prose prose-sm dark:prose-invert max-w-none [&_p]:mb-1 [&_p]:last:mb-0">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

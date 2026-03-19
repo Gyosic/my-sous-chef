@@ -55,6 +55,10 @@ export function useCookingSocket({
   const socketRef = useRef<Socket | null>(null);
   const currentAiResponseRef = useRef("");
 
+  // 콜백을 ref로 안정화 — 소켓 재연결 방지
+  const callbacksRef = useRef({ onTranscription, onAiChunk, onAiResponseEnd, onAiAudioChunk, onError });
+  callbacksRef.current = { onTranscription, onAiChunk, onAiResponseEnd, onAiAudioChunk, onError };
+
   const connect = useCallback(() => {
     if (socketRef.current?.connected) return;
 
@@ -81,8 +85,7 @@ export function useCookingSocket({
 
     socket.on("transcription", (data: { text: string }) => {
       setMessages((prev) => [...prev, { role: "user", content: data.text }]);
-      onTranscription?.(data.text);
-      // Reset AI response buffer
+      callbacksRef.current.onTranscription?.(data.text);
       currentAiResponseRef.current = "";
       setCurrentAiResponse("");
     });
@@ -90,11 +93,11 @@ export function useCookingSocket({
     socket.on("ai_response_chunk", (data: { text: string }) => {
       currentAiResponseRef.current += data.text;
       setCurrentAiResponse(currentAiResponseRef.current);
-      onAiChunk?.(data.text);
+      callbacksRef.current.onAiChunk?.(data.text);
     });
 
     socket.on("ai_audio_chunk", (data: { audio: ArrayBuffer }) => {
-      onAiAudioChunk?.(data.audio);
+      callbacksRef.current.onAiAudioChunk?.(data.audio);
     });
 
     socket.on("ai_response_end", () => {
@@ -104,7 +107,7 @@ export function useCookingSocket({
       }
       currentAiResponseRef.current = "";
       setCurrentAiResponse("");
-      onAiResponseEnd?.();
+      callbacksRef.current.onAiResponseEnd?.();
     });
 
     socket.on("session_ended", () => {
@@ -113,11 +116,11 @@ export function useCookingSocket({
     });
 
     socket.on("error", (data: { message: string }) => {
-      onError?.(data.message);
+      callbacksRef.current.onError?.(data.message);
     });
 
     socketRef.current = socket;
-  }, [serverUrl, onTranscription, onAiChunk, onAiResponseEnd, onAiAudioChunk, onError]);
+  }, [serverUrl]);
 
   const startSession = useCallback(
     (recipeId: string, recipeData: RecipeData, model?: string) => {
