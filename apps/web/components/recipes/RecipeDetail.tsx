@@ -27,13 +27,16 @@ function getDifficultyStyle(difficulty: string) {
   }
 }
 
-export function RecipeDetail() {
+interface RecipeDetailProps {
+  wsUrl?: string;
+}
+export function RecipeDetail({ wsUrl }: RecipeDetailProps) {
   const { currentRecipe: recipe } = useRecipeStore();
 
   if (!recipe) return <RecipeDetailEmpty />;
 
   return (
-    <CookingSessionProvider>
+    <CookingSessionProvider wsUrl={wsUrl}>
       <RecipeDetailInner />
     </CookingSessionProvider>
   );
@@ -43,8 +46,7 @@ function RecipeDetailInner() {
   const { currentRecipe: recipe } = useRecipeStore();
   const [aiStarted, setAiStarted] = useState(false);
   const { formatted } = useElapsedTime(aiStarted);
-  const { startSession, endSession, isConnected } =
-    useCookingSessionContext();
+  const { startSession, endSession, isConnected } = useCookingSessionContext();
 
   if (!recipe) return null;
 
@@ -54,9 +56,7 @@ function RecipeDetailInner() {
         name: recipe.name,
         description: recipe.description,
         steps: recipe.steps.map((s) => `${s.title}: ${s.description}`),
-        ingredients: recipe.ingredients.map(
-          (i) => `${i.name} ${i.amount}`,
-        ),
+        ingredients: recipe.ingredients.map((i) => `${i.name} ${i.amount}`),
       });
       setAiStarted(true);
     } else {

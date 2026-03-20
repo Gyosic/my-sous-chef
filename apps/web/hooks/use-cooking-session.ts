@@ -10,7 +10,7 @@ interface UseCookingSessionOptions {
 }
 
 export function useCookingSession({
-  serverUrl = process.env.NEXT_PUBLIC_WS_URL || "http://localhost:4000",
+  serverUrl = "http://localhost:4000",
 }: UseCookingSessionOptions = {}) {
   const isAiRespondingRef = useRef(false);
 

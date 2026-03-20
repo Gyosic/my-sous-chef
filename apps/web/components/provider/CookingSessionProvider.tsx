@@ -11,10 +11,12 @@ const CookingSessionContext = createContext<CookingSessionContextType | null>(
 
 export function CookingSessionProvider({
   children,
+  wsUrl,
 }: {
   children: React.ReactNode;
+  wsUrl?: string;
 }) {
-  const session = useCookingSession();
+  const session = useCookingSession({ serverUrl: wsUrl });
   return (
     <CookingSessionContext.Provider value={session}>
       {children}
