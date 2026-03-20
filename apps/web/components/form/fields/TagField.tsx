@@ -32,7 +32,7 @@ export function TagField<T extends FieldValues, K extends FieldPath<T>>({
   };
 
   const removeBucket = (item: string) => {
-    const filtered = field.value.filter((i) => i !== item);
+    const filtered = field.value.filter((i: string) => i !== item);
     field.onChange(filtered);
   };
 
@@ -87,7 +87,7 @@ export function TagField<T extends FieldValues, K extends FieldPath<T>>({
           {field.value.length > 0 && (
             <>
               <div className="flex flex-wrap gap-2">
-                {field.value.map((item) => (
+                {field.value.map((item: string) => (
                   <Badge
                     key={item}
                     variant="secondary"

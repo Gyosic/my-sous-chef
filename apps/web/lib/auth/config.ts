@@ -3,7 +3,7 @@ import type { NextAuthConfig } from "next-auth";
 import { SignJWT } from "jose";
 import Google from "next-auth/providers/google";
 import Naver from "next-auth/providers/naver";
-import { accounts, users } from "@repo/db";
+import { accounts, users } from "@repo/db/schema";
 import { db } from "@/lib/db";
 
 export type NextAuthPageSearchParams = Promise<{ callbackUrl?: string }>;
