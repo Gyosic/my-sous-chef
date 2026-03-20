@@ -47,6 +47,8 @@
     "@nestjs/testing": "^11.0.1",
     "@repo/eslint-config": "workspace:^",
     "@repo/typescript-config": "workspace:^",
+    "@swc/cli": "^0.8.0",
+    "@swc/core": "^1.15.18",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
