@@ -17,6 +17,7 @@ interface RecipeData {
 
 interface UseCookingSocketOptions {
   serverUrl: string;
+  onSessionStarted?: () => void;
   onTranscription?: (text: string) => void;
   onAiChunk?: (text: string) => void;
   onAiResponseEnd?: () => void;
@@ -40,6 +41,7 @@ interface UseCookingSocketReturn {
 
 export function useCookingSocket({
   serverUrl,
+  onSessionStarted,
   onTranscription,
   onAiChunk,
   onAiResponseEnd,
@@ -56,8 +58,8 @@ export function useCookingSocket({
   const currentAiResponseRef = useRef("");
 
   // 콜백을 ref로 안정화 — 소켓 재연결 방지
-  const callbacksRef = useRef({ onTranscription, onAiChunk, onAiResponseEnd, onAiAudioChunk, onError });
-  callbacksRef.current = { onTranscription, onAiChunk, onAiResponseEnd, onAiAudioChunk, onError };
+  const callbacksRef = useRef({ onSessionStarted, onTranscription, onAiChunk, onAiResponseEnd, onAiAudioChunk, onError });
+  callbacksRef.current = { onSessionStarted, onTranscription, onAiChunk, onAiResponseEnd, onAiAudioChunk, onError };
 
   const connect = useCallback(() => {
     if (socketRef.current?.connected) return;
@@ -81,6 +83,7 @@ export function useCookingSocket({
     socket.on("session_started", (data: { sessionId: string; recipe: RecipeData }) => {
       setSessionId(data.sessionId);
       setRecipe(data.recipe);
+      callbacksRef.current.onSessionStarted?.();
     });
 
     socket.on("transcription", (data: { text: string }) => {

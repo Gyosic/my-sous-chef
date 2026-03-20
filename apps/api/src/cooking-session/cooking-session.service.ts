@@ -59,6 +59,10 @@ export class CookingSessionService {
     return this.sttService.transcribe(audioBuffer);
   }
 
+  async synthesizeGreeting(text: string): Promise<Buffer> {
+    return this.ttsService.synthesize(text);
+  }
+
   async *processMessage(
     sessionId: string,
     userMessage: string,

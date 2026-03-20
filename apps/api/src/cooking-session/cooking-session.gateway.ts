@@ -48,7 +48,7 @@ export class CookingSessionGateway
   }
 
   @SubscribeMessage("start_session")
-  handleStartSession(
+  async handleStartSession(
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: StartSessionPayload,
   ) {
@@ -59,6 +59,20 @@ export class CookingSessionGateway
       sessionId: session.sessionId,
       recipe: session.recipe,
     });
+
+    // 첫 인사 메시지
+    const greeting = "요리를 시작합니다. 도움이 필요하면 말씀해주세요.";
+    client.emit("ai_response_chunk", { text: greeting });
+
+    try {
+      const audioBuffer =
+        await this.cookingSessionService.synthesizeGreeting(greeting);
+      client.emit("ai_audio_chunk", { audio: audioBuffer });
+    } catch (err) {
+      this.logger.error(`Greeting TTS failed: ${err}`);
+    }
+
+    client.emit("ai_response_end", {});
   }
 
   @SubscribeMessage("audio_chunk")
@@ -86,6 +100,10 @@ export class CookingSessionGateway
     if (chunks.length === 0) return;
 
     const audioBuffer = Buffer.concat(chunks);
+
+    this.logger.log(
+      `Audio buffer size: ${audioBuffer.length}, first bytes: ${audioBuffer.slice(0, 4).toString("hex")}`,
+    );
 
     try {
       // STT

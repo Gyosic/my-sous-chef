@@ -19,8 +19,13 @@ export function useCookingSession({
   const enqueueAudioRef = useRef(enqueueAudio);
   enqueueAudioRef.current = enqueueAudio;
 
+  const recorderRef = useRef<{ startListening: () => Promise<void> } | null>(null);
+
   const callbacks = useMemo(
     () => ({
+      onSessionStarted: () => {
+        recorderRef.current?.startListening();
+      },
       onAiAudioChunk: (audio: ArrayBuffer) => {
         enqueueAudioRef.current(audio);
       },
@@ -44,20 +49,23 @@ export function useCookingSession({
 
   const recorder = useAudioRecorder({
     enabled: !isPlaying && !!socket.sessionId,
-    onAudioChunk: (chunk) => {
-      socket.sendAudioChunk(chunk);
-    },
-    onRecordingComplete: () => {
-      socket.sendAudioEnd();
+    onRecordingComplete: (chunks) => {
+      const blob = new Blob(chunks, { type: "audio/webm;codecs=opus" });
+      blob.arrayBuffer().then((buffer) => {
+        socket.sendAudioChunk(buffer);
+        socket.sendAudioEnd();
+      });
     },
   });
+
+  recorderRef.current = recorder;
 
   const startSession = useCallback(
     (recipeId: string, recipe: { name: string; description: string; steps: string[]; ingredients: string[] }) => {
       socket.startSession(recipeId, recipe);
-      recorder.startListening();
+      // recorder.startListening()은 onSessionStarted 콜백에서 호출됨
     },
-    [socket, recorder],
+    [socket],
   );
 
   const endSession = useCallback(() => {

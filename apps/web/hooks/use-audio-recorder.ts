@@ -22,7 +22,7 @@ interface UseAudioRecorderReturn {
 export function useAudioRecorder({
   onAudioChunk,
   onRecordingComplete,
-  vadThreshold = -45,
+  vadThreshold = -30,
   silenceTimeout = 1500,
   enabled = true,
 }: UseAudioRecorderOptions = {}): UseAudioRecorderReturn {
@@ -39,6 +39,8 @@ export function useAudioRecorder({
   const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const chunksRef = useRef<ArrayBuffer[]>([]);
   const isRecordingRef = useRef(false);
+  const enabledRef = useRef(enabled);
+  enabledRef.current = enabled;
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current?.state === "recording") {
@@ -98,7 +100,7 @@ export function useAudioRecorder({
 
       setVolumeLevel(db);
 
-      if (enabled && db > vadThreshold) {
+      if (enabledRef.current && db > vadThreshold) {
         // Voice detected
         if (!isRecordingRef.current) {
           startRecording();
@@ -120,7 +122,7 @@ export function useAudioRecorder({
     };
 
     check();
-  }, [enabled, vadThreshold, silenceTimeout, startRecording, stopRecording]);
+  }, [vadThreshold, silenceTimeout, startRecording, stopRecording]);
 
   const startListening = useCallback(async () => {
     try {

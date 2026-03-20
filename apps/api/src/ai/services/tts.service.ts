@@ -17,7 +17,7 @@ export class TtsService {
       model: "tts-1",
       voice: "nova",
       input: text,
-      response_format: "opus",
+      response_format: "mp3",
     });
 
     const arrayBuffer = await response.arrayBuffer();
