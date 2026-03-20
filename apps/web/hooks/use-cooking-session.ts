@@ -10,7 +10,7 @@ interface UseCookingSessionOptions {
 }
 
 export function useCookingSession({
-  serverUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
+  serverUrl = process.env.NEXT_PUBLIC_WS_URL || "http://localhost:4000",
 }: UseCookingSessionOptions = {}) {
   const isAiRespondingRef = useRef(false);
 
@@ -19,7 +19,9 @@ export function useCookingSession({
   const enqueueAudioRef = useRef(enqueueAudio);
   enqueueAudioRef.current = enqueueAudio;
 
-  const recorderRef = useRef<{ startListening: () => Promise<void> } | null>(null);
+  const recorderRef = useRef<{ startListening: () => Promise<void> } | null>(
+    null,
+  );
 
   const callbacks = useMemo(
     () => ({
@@ -61,7 +63,15 @@ export function useCookingSession({
   recorderRef.current = recorder;
 
   const startSession = useCallback(
-    (recipeId: string, recipe: { name: string; description: string; steps: string[]; ingredients: string[] }) => {
+    (
+      recipeId: string,
+      recipe: {
+        name: string;
+        description: string;
+        steps: string[];
+        ingredients: string[];
+      },
+    ) => {
       socket.startSession(recipeId, recipe);
       // recorder.startListening()은 onSessionStarted 콜백에서 호출됨
     },

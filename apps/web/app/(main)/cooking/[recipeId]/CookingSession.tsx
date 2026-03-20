@@ -25,7 +25,7 @@ export function CookingSession({ recipeId }: CookingSessionProps) {
   const { isPlaying, enqueueAudio, stop: stopAudio } = useAudioPlayer();
 
   const socket = useCookingSocket({
-    serverUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
+    serverUrl: process.env.NEXT_PUBLIC_WS_URL || "http://localhost:4000",
     onAiAudioChunk: (audio) => {
       enqueueAudio(audio);
     },
