@@ -1,7 +1,6 @@
 import { Plus, Search, X } from "lucide-react";
-import { FieldPath, FieldValues } from "react-hook-form";
 import { FormItemWrapper } from "@/components/form/FormItemWrapper";
-import { TemplateFormItemProps } from "@/components/form/TemplateFormItem";
+import { useTemplateFormItem } from "@/components/form/TemplateFormItem";
 import { Button } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
 import { useState } from "react";
@@ -12,15 +11,13 @@ import {
   InputGroupInput,
 } from "@repo/ui/components/input-group";
 
-export function TagField<T extends FieldValues, K extends FieldPath<T>>({
-  fieldModel,
-  field,
-  fieldState,
-  isForm = true,
-  className,
-  labelPosition = "top",
-  labelCls,
-}: TemplateFormItemProps<T, K>) {
+export function TagField() {
+  const {
+    field,
+    fieldModel,
+    className,
+    labelPosition = "top",
+  } = useTemplateFormItem();
   const [inputValue, setInputValue] = useState("");
 
   const addBucket = () => {
@@ -39,16 +36,10 @@ export function TagField<T extends FieldValues, K extends FieldPath<T>>({
   return (
     <>
       <FormItemWrapper
-        name={fieldModel.name}
-        desc={fieldModel.desc}
-        isForm={isForm}
         className={cn(
           className,
           labelPosition === "left" ? "flex flex-1 items-center" : "flex-1",
         )}
-        labelCls={labelCls}
-        icon={fieldModel.icon}
-        fieldState={fieldState}
       >
         <div className="flex flex-col w-full gap-2">
           <div className="relative flex w-full items-center gap-2">

@@ -1,6 +1,5 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
 import { createElement } from "react";
 
 import { useDynamicIcon } from "@repo/ui/hooks/use-lucide-icon";
@@ -11,32 +10,26 @@ import {
   FieldError,
   FieldLabel,
 } from "@repo/ui/components/field";
-import { ControllerFieldState } from "react-hook-form";
+import { useTemplateFormItem } from "@/components/form/TemplateFormItem";
 
 interface FormItemWrapperProps {
-  children: React.ReactNode;
-  isForm: boolean;
-  name: string;
-  desc?: string;
-  labelCls?: string;
   className?: string;
   formLabel?: React.ReactNode;
-  icon?: LucideIcon | string;
-  fieldState: ControllerFieldState;
 }
 
 export function FormItemWrapper({
   children,
-  name,
-  desc,
-  labelCls,
-  isForm,
   className,
   formLabel,
-  icon,
-  fieldState,
-}: FormItemWrapperProps) {
-  const iconComponent = useDynamicIcon(icon);
+}: FormItemWrapperProps & { children: React.ReactNode }) {
+  const {
+    isForm = true,
+    fieldModel,
+    fieldState,
+    labelCls,
+  } = useTemplateFormItem();
+
+  const iconComponent = useDynamicIcon(fieldModel.icon);
 
   if (!isForm) return <>{children}</>;
 
@@ -48,13 +41,13 @@ export function FormItemWrapper({
         <FieldLabel className={cn(labelCls)}>
           {iconComponent &&
             createElement(iconComponent, { className: "size-4" })}{" "}
-          {name}
+          {fieldModel.name}
         </FieldLabel>
       )}
       {children}
-      {desc && (
+      {fieldModel.desc && (
         <FieldDescription className="text-gray-500 text-xs">
-          {desc}
+          {fieldModel.desc}
         </FieldDescription>
       )}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
