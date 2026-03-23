@@ -7,6 +7,7 @@ import { DatabaseModule } from "database/database.module";
 import { RecommendsModule } from "./recommends/recommends.module";
 import { AiModule } from "./ai/ai.module";
 import { CookingSessionModule } from "./cooking-session/cooking-session.module";
+import { RecipesModule } from "./recipes/recipes.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CookingSessionModule } from "./cooking-session/cooking-session.module";
     UsersModule,
     RecommendsModule,
     CookingSessionModule,
+    RecipesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

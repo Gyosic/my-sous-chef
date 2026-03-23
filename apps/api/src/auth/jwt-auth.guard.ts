@@ -7,6 +7,11 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { jwtVerify } from "jose";
 
+export type AuthUser = {
+  id: string;
+  email: string;
+};
+
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   private secret: Uint8Array;

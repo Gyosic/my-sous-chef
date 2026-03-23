@@ -23,6 +23,14 @@ export class UsersService {
     return { user };
   }
 
+  async findOneByEmail(email: string) {
+    const [user] = await this.db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.email, email));
+    return { user };
+  }
+
   remove(id: string) {
     return `This action removes a #${id} user`;
   }
