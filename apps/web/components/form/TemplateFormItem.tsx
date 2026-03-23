@@ -10,6 +10,7 @@ import { PasswordField } from "./fields/PasswordField";
 import { TextField } from "./fields/TextField";
 import { TagField } from "./fields/TagField";
 import { createContext, useContext } from "react";
+import { TextareaField } from "@/components/form/fields/TextareaField";
 
 export interface FieldModel {
   name: string;
@@ -77,6 +78,8 @@ export function TemplateFormItem<T extends FieldValues, K extends FieldPath<T>>(
         return <PasswordField />;
       case "tag":
         return <TagField />;
+      case "textarea":
+        return <TextareaField />;
       default:
         return <TextField />;
     }

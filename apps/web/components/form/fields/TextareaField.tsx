@@ -1,4 +1,4 @@
-import { Check, X } from "lucide-react";
+import { X } from "lucide-react";
 import { FormItemWrapper } from "@/components/form/FormItemWrapper";
 import { useTemplateFormItem } from "@/components/form/TemplateFormItem";
 import { Button } from "@repo/ui/components/button";
@@ -6,17 +6,15 @@ import { cn } from "@repo/ui/lib/utils";
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupInput,
+  InputGroupTextarea,
 } from "@repo/ui/components/input-group";
 
-export function TextField() {
+export function TextareaField() {
   const {
     field,
     fieldModel,
     className,
     labelPosition = "top",
-    isDuplicate = true,
-    onDuplicateCheck,
   } = useTemplateFormItem();
 
   return (
@@ -30,7 +28,7 @@ export function TextField() {
         <div className="flex w-full items-center gap-2">
           <div className="relative flex w-full items-center gap-2">
             <InputGroup>
-              <InputGroupInput
+              <InputGroupTextarea
                 readOnly={fieldModel.readOnly}
                 placeholder={fieldModel?.placeholder ?? `입력하세요.`}
                 {...field}
@@ -55,16 +53,6 @@ export function TextField() {
               )}
             </InputGroup>
           </div>
-          {!!fieldModel?.unique && (
-            <Button
-              variant="outline"
-              type="button"
-              disabled={!field.value || !isDuplicate}
-              onClick={() => onDuplicateCheck?.(field.name, field.value)}
-            >
-              {!isDuplicate && <Check />} 중복검사
-            </Button>
-          )}
         </div>
       </FormItemWrapper>
     </>
