@@ -5,7 +5,7 @@ import { MessageCircle, X } from "lucide-react";
 import { useChatStore } from "@/hooks/use-chat-store";
 import { Button } from "@repo/ui/components/button";
 import { cn } from "@/lib/utils";
-import { ChatWindow } from "@/domains/recipes/components/ChatWindow";
+import { ChatWindow } from "@/app/(main)/recipes/detail/components/ChatWindow";
 
 interface ChatBotProps {
   isAbsolute?: boolean;

@@ -5,14 +5,14 @@ import { Timer, ChefHat } from "lucide-react";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { TopBar } from "@/components/shared/TopBar";
-import { RecipeDetailEmpty } from "@/components/recipes/RecipeDetailEmpty";
+import { RecipeDetailEmpty } from "./RecipeDetailEmpty";
 import { useRecipeStore } from "@/hooks/use-recipes-store";
-import { ChatBot } from "@/domains/recipes/components/ChatBot";
+import { ChatBot } from "@/app/(main)/recipes/detail/components/ChatBot";
 import { useElapsedTime } from "@/hooks/use-elapsed-time";
 import {
   CookingSessionProvider,
   useCookingSessionContext,
-} from "@/domains/recipes/components/CookingSessionProvider";
+} from "@/app/(main)/recipes/detail/components/CookingSessionProvider";
 
 function getDifficultyStyle(difficulty: string) {
   switch (difficulty) {

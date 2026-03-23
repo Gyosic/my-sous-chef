@@ -4,12 +4,12 @@ import { ChefHat, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { Button } from "@repo/ui/components/button";
 import { useChatStore } from "@/hooks/use-chat-store";
-import { useCookingSessionContext } from "@/domains/recipes/components/CookingSessionProvider";
-import { VoiceControl } from "@/domains/recipes/components/VoiceControl";
+import { useCookingSessionContext } from "@/app/(main)/recipes/detail/components/CookingSessionProvider";
+import { VoiceControl } from "@/app/(main)/recipes/detail/components/VoiceControl";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ChatInput } from "@/domains/recipes/components/ChatInput";
+import { ChatInput } from "@/app/(main)/recipes/detail/components/ChatInput";
 
 interface ChatWindowProps {
   variant?: "inline" | "floating";

@@ -1,7 +1,7 @@
 "use client";
 
-import { MyRecipe } from "@/domains/recipes/components/MyRecipe";
-import { RecipeRecommendCard } from "@/domains/recipes/components/RecipeRecommendCard";
+import { MyRecipe } from "@/app/(main)/recipes/components/MyRecipe";
+import { RecipeRecommendCard } from "@/app/(main)/recipes/components/RecipeRecommendCard";
 import { useRecipeStore } from "@/hooks/use-recipes-store";
 import { Button } from "@repo/ui/components/button";
 import { toast } from "@repo/ui/components/sonner";
