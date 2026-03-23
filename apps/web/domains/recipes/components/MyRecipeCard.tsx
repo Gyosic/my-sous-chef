@@ -22,7 +22,7 @@ function getMatchBadgeStyle(rate: number) {
   return "bg-muted-foreground text-white";
 }
 
-export function RecipeCard(recipe: RecipeState) {
+export function MyRecipeCard(recipe: RecipeState) {
   const router = useRouter();
   const { setCurrentRecipe } = useRecipeStore();
   const handleClick = () => {
