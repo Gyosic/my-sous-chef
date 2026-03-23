@@ -16,7 +16,7 @@ import { User } from "src/common/decorators/user.decorator";
 import { UsersService } from "src/users/users.service";
 
 @UseGuards(JwtAuthGuard)
-@Controller("api/recipes")
+@Controller("/api/recipes")
 export class RecipesController {
   constructor(
     private readonly recipesService: RecipesService,
@@ -32,12 +32,21 @@ export class RecipesController {
       user.email,
     );
 
-    return this.recipesService.create({ ...createRecipeDto, userId: userId! });
+    const data = await this.recipesService.create({
+      ...createRecipeDto,
+      userId: userId!,
+    });
+    return data;
   }
 
   @Get()
-  findAll() {
-    return this.recipesService.findAll();
+  async findAll(@User() user: AuthUser) {
+    const { user: { id: userId } = {} } = await this.userService.findOneByEmail(
+      user.email,
+    );
+
+    const data = await this.recipesService.findAll({ userId: userId! });
+    return data;
   }
 
   @Get(":id")

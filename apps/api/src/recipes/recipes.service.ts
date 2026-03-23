@@ -4,6 +4,7 @@ import { type UpdateRecipeDto } from "./dto/update-recipe.dto";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "@repo/db/schema";
 import { DRIZZLE } from "database/database.module";
+import { eq } from "drizzle-orm";
 
 @Injectable()
 export class RecipesService {
@@ -18,8 +19,13 @@ export class RecipesService {
     return { recipe };
   }
 
-  findAll() {
-    return `This action returns all recipes`;
+  async findAll({ userId }: { userId: string }) {
+    const recipes = await this.db
+      .select()
+      .from(schema.recipes)
+      .where(eq(schema.recipes.userId, userId));
+
+    return { recipes };
   }
 
   findOne(id: number) {
