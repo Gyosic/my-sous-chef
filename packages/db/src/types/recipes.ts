@@ -20,12 +20,12 @@ export const recipeSchema = z.object({
     .string()
     .optional()
     .meta({ name: "레시피 설명", type: "textarea" }),
-  steps: z.array(stepSchema).meta({ name: "요리순서", type: "text" }),
-  ingredients: z.array(ingredientSchema).meta({ name: "재료", type: "text" }),
+  steps: z.array(stepSchema).meta({ name: "요리순서", type: "nested" }),
+  ingredients: z.array(ingredientSchema).meta({ name: "재료", type: "nested" }),
   units: z
     .array(unitSchema)
     .optional()
-    .meta({ name: "계량단위", type: "text" }),
+    .meta({ name: "계량단위", type: "nested" }),
   servings: z.number().meta({ name: "인분", type: "number" }),
 });
 
