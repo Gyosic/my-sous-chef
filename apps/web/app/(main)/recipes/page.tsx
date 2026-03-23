@@ -1,5 +1,5 @@
-import { RecipeResultsContent } from "@/components/recipes/RecipeResultsContent";
-import { TopBar } from "@/components/TopBar";
+import { RecipeResultsContent } from "@/domains/recipes/components/RecipeResultsContent";
+import { TopBar } from "@/components/shared/TopBar";
 
 export default function RecipeResultsPage() {
   return (

@@ -1,15 +1,15 @@
 "use client";
 
-import { IngredientInput } from "@/components/IngredientInput";
-import { CategorySection } from "@/components/CategorySection";
-import { RecipeRecommendButton } from "@/components/recipes/RecipeRecommendButton";
+import { IngredientInput } from "@/domains/home/components/IngredientInput";
+import { CategorySection } from "@/domains/home/components/CategorySection";
+import { RecipeRecommendButton } from "@/domains/home/components/RecipeRecommendButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { recommendSchema, type RecommendInput } from "@repo/db/types/recommend";
 import { useRouter } from "next/navigation";
 import { useRecipeStore } from "@/hooks/use-recipes-store";
-import { RecipeLoading } from "@/components/recipes/RecipeLoading";
+import { RecipeLoading } from "@/domains/home/components/RecipeLoading";
 import { toast } from "@repo/ui/components/sonner";
 import { useState } from "react";
 

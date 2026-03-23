@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { useCookingSession } from "@/hooks/use-cooking-session";
+import { useCookingSession } from "@/domains/recipes/hooks/use-cooking-session";
 
 type CookingSessionContextType = ReturnType<typeof useCookingSession>;
 

@@ -1,4 +1,4 @@
-import { RecipeDetail } from "@/components/recipes/RecipeDetail";
+import { RecipeDetail } from "@/domains/recipes/components/RecipeDetail";
 import { api } from "@/config";
 
 export default async function RecipeDetailPage() {

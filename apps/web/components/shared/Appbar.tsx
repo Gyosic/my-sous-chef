@@ -1,8 +1,8 @@
 "use client";
 import { Zap, User } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
-import { LogoutButton } from "./LogoutButton";
 import { useRouter } from "next/navigation";
+import { LogoutButton } from "@/components/shared/LogoutButton";
 
 interface AppbarProps {
   user?: { name?: string | null } | null;

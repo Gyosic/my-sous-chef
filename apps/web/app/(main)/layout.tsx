@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
-import { Appbar } from "@/components/Appbar";
-import { BottomNav } from "@/components/BottomNav";
+import { Appbar } from "@/components/shared/Appbar";
+import { BottomNav } from "@/components/shared/BottomNav";
 
 export default async function MainLayout({
   children,

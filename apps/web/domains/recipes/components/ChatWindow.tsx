@@ -4,12 +4,12 @@ import { ChefHat, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { Button } from "@repo/ui/components/button";
 import { useChatStore } from "@/hooks/use-chat-store";
-import { useCookingSessionContext } from "@/components/provider/CookingSessionProvider";
-import { VoiceControl } from "@/components/cooking/VoiceControl";
-import { ChatInput } from "./ChatInput";
+import { useCookingSessionContext } from "@/domains/recipes/components/CookingSessionProvider";
+import { VoiceControl } from "@/domains/recipes/components/VoiceControl";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { ChatInput } from "@/domains/recipes/components/ChatInput";
 
 interface ChatWindowProps {
   variant?: "inline" | "floating";
@@ -110,9 +110,7 @@ export function ChatWindow({ variant = "floating" }: ChatWindowProps) {
       <ChatInput
         isLoading={isLoading}
         onSend={handleSend}
-        placeholder={
-          sessionId ? "텍스트로 질문하기..." : "세션 연결 대기중..."
-        }
+        placeholder={sessionId ? "텍스트로 질문하기..." : "세션 연결 대기중..."}
       />
     </div>
   );
