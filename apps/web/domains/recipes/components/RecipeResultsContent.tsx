@@ -1,6 +1,6 @@
 "use client";
 
-import { RecipeCard } from "@/components/recipes/RecipeCard";
+import { RecipeCard } from "@/domains/recipes/components/RecipeCard";
 import { useRecipeStore } from "@/hooks/use-recipes-store";
 
 export function RecipeResultsContent() {

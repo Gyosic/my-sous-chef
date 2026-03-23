@@ -1,5 +1,5 @@
 "use client";
-import { Zap, User } from "lucide-react";
+import { User, ChefHat } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { useRouter } from "next/navigation";
 import { LogoutButton } from "@/components/shared/LogoutButton";
@@ -14,7 +14,7 @@ export function Appbar({ user }: AppbarProps) {
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-100 px-4">
       <div className="flex items-center gap-2">
         <div className="flex size-8 items-center justify-center rounded-lg bg-neutral-900">
-          <Zap className="size-[18px] text-white" />
+          <ChefHat className="size-4.5 text-white" />
         </div>
         <span className="text-base font-bold text-foreground">
           My Sous Chef

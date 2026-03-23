@@ -16,7 +16,7 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "js/ts.preferences.includePackageJsonAutoImports": "auto",
+  "js/ts.preferences.includePackageJsonAutoImports": "on",
   "js/ts.tsserver.experimental.enableProjectDiagnostics": false,
   "js/ts.preferences.autoImportFileExcludePatterns": [],
   "files.watcherExclude": {

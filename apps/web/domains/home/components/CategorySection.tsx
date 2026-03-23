@@ -60,7 +60,7 @@ export function CategorySection({ onChipClick }: CategorySectionProps) {
             onOpenChange={(open) => setOpenIndex(open ? index : -1)}
           >
             <div className="overflow-hidden rounded-[14px] bg-muted/50">
-              <CollapsibleTrigger asChild>
+              <CollapsibleTrigger asChild className="hover:bg-transparent">
                 <Button
                   type="button"
                   className="flex h-12 w-full items-center justify-between px-3.5 bg-transparent"
