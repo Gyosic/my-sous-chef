@@ -1,4 +1,4 @@
-import { RecipeRegistrate } from "@/domains/recipes/components/RecipeRegistrate";
+import { RecipeRegistrate } from "@/app/(main)/recipes/registrate/components/RecipeRegistrate";
 
 export default async function RecipeRegistratePage() {
   return <RecipeRegistrate />;

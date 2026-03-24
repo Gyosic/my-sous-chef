@@ -1,8 +1,8 @@
 "use client";
 
 import { BaseurlContext } from "@/components/provider/BaseurlProvider";
-import { MyRecipeCard } from "@/domains/recipes/components/MyRecipeCard";
-import { useRecipes } from "@/domains/recipes/hooks/use-recipes";
+import { MyRecipeCard } from "@/app/(main)/recipes/components/MyRecipeCard";
+import { useRecipes } from "@/app/(main)/recipes/hooks/use-recipes";
 import { RecipeState } from "@/hooks/use-recipes-store";
 import { Button } from "@repo/ui/components/button";
 import { Plus } from "lucide-react";

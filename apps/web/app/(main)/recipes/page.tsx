@@ -1,4 +1,4 @@
-import { RecipeResultsContent } from "@/domains/recipes/components/RecipeResultsContent";
+import { RecipeResultsContent } from "@/app/(main)/recipes/components/RecipeResultsContent";
 
 export default function RecipeResultsPage() {
   return (
