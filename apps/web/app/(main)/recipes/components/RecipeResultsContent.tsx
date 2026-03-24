@@ -15,15 +15,18 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+const queryClient = new QueryClient();
+
 export function RecipeResultsContent() {
-  const queryClient = new QueryClient();
   const [selectedTab, setSelectedTab] = useState("recommand");
   const { status: sessionStatus } = useSession();
   const router = useRouter();
 
   const handleTabValueChange = (tab: string) => {
+    if (tab === selectedTab) return;
     if (sessionStatus === "unauthenticated" && tab === "my-recipe") {
       toast.warning("로그인이 필요합니다.", {
+        id: "login-required",
         action: (
           <Button type="button" onClick={() => router.push("signin")}>
             로그인
