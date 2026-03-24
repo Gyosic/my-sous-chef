@@ -6,6 +6,7 @@ export default [
   {
     rules: {
       "turbo/no-undeclared-env-vars": "off",
+      "react-hooks/exhaustive-deps": "off",
     },
   },
 ];
