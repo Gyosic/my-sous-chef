@@ -15,6 +15,13 @@
       "when": 1774248848808,
       "tag": "0001_handy_vargas",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774339919562,
+      "tag": "0002_public_blonde_phantom",
+      "breakpoints": true
     }
   ]
 }
