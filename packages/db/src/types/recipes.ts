@@ -23,14 +23,12 @@ const ingredientSchema = z.object({
     .string("필수입력값 입니다.")
     .min(1, "필수입력값 입니다.")
     .meta({ name: "계량", type: "text", placeholder: "수량" }),
-  optional: z
-    .boolean("유효하지 않은 값 입니다.")
-    .meta({
-      name: "옵션",
-      type: "toggle",
-      placeholder: "옵션",
-      default: false,
-    }),
+  optional: z.boolean("유효하지 않은 값 입니다.").meta({
+    name: "옵션",
+    type: "toggle",
+    placeholder: "옵션",
+    default: false,
+  }),
 });
 const unitSchema = z.object({
   name: z
@@ -51,6 +49,21 @@ export const recipeSchema = z.object({
     type: "textarea",
     placeholder: "레시피에 대한 간단 설명을 입력하세요",
   }),
+  units: z.array(unitSchema).optional().meta({
+    name: "계량단위",
+    type: "nested",
+    nestedSchema: unitSchema,
+    required: false,
+  }),
+  ingredients: z
+    .array(ingredientSchema, "필수입력값 입니다.")
+    .min(1, "필수입력값 입니다.")
+    .meta({
+      name: "재료",
+      type: "nested",
+      nestedSchema: ingredientSchema,
+      required: true,
+    }),
   steps: z
     .array(stepSchema, "필수입력값 입니다.")
     .min(1, "필수입력값 입니다.")
@@ -61,24 +74,10 @@ export const recipeSchema = z.object({
       nestedDirection: "horizon",
       required: true,
     }),
-  ingredients: z
-    .array(ingredientSchema, "필수입력값 입니다.")
-    .min(1, "필수입력값 입니다.")
-    .meta({
-      name: "재료",
-      type: "nested",
-      nestedSchema: ingredientSchema,
-      required: true,
-    }),
-  units: z.array(unitSchema).optional().meta({
-    name: "계량단위",
-    type: "nested",
-    nestedSchema: unitSchema,
-    required: false,
-  }),
   servings: z.coerce
     .number("숫자만 입력해주세요.")
     .meta({ name: "인분", type: "number", step: 0.5, default: 1 }),
 });
 
 export type RecipeInput = z.input<typeof recipeSchema>;
+export type RecipeOutput = z.output<typeof recipeSchema>;
