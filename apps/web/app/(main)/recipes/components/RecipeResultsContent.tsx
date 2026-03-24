@@ -18,7 +18,7 @@ import { useState } from "react";
 export function RecipeResultsContent() {
   const queryClient = new QueryClient();
   const [selectedTab, setSelectedTab] = useState("recommand");
-  const { data: sessionData, status: sessionStatus } = useSession();
+  const { status: sessionStatus } = useSession();
   const router = useRouter();
 
   const handleTabValueChange = (tab: string) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { RecipeRecommendCard } from "@/app/(main)/recipes/components/RecipeRecommendCard";
+import { RecipeCard } from "@/app/(main)/recipes/components/RecipeCard";
 import {
   Empty,
   EmptyContent,
@@ -27,7 +27,7 @@ export function RecommendRecipe() {
           </div>
           <div className="flex flex-col gap-3.5 w-full">
             {recipes.map((recipe, i) => (
-              <RecipeRecommendCard key={i} {...recipe} />
+              <RecipeCard key={i} {...recipe} />
             ))}
           </div>
         </>

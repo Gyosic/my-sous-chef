@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Timer, ChefHat } from "lucide-react";
+import { ChefHat, Users, Carrot, ListOrdered } from "lucide-react";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { TopBar } from "@/components/shared/TopBar";
@@ -13,19 +13,6 @@ import {
   CookingSessionProvider,
   useCookingSessionContext,
 } from "@/app/(main)/recipes/detail/components/CookingSessionProvider";
-
-function getDifficultyStyle(difficulty: string) {
-  switch (difficulty) {
-    case "쉽게":
-      return "bg-green-50 text-green-500";
-    case "보통":
-      return "bg-yellow-50 text-yellow-500";
-    case "어려움":
-      return "bg-red-50 text-red-500";
-    default:
-      return "bg-muted text-muted-foreground";
-  }
-}
 
 interface RecipeDetailProps {
   wsUrl?: string;
@@ -54,7 +41,7 @@ function RecipeDetailInner() {
     if (!aiStarted) {
       startSession(recipe.id, {
         name: recipe.name,
-        description: recipe.description,
+        description: recipe?.description ?? "",
         steps: recipe.steps.map((s) => `${s.title}: ${s.description}`),
         ingredients: recipe.ingredients.map((i) => `${i.name} ${i.amount}`),
       });
@@ -68,7 +55,7 @@ function RecipeDetailInner() {
   return (
     <div className="relative flex h-full flex-col bg-white">
       {/* Top Bar */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-100 px-4">
+      <header className="flex shrink-0 items-center justify-between border-neutral-100">
         <TopBar title="레시피 상세" />
         {/* TODO: 북마크 기능 추가시 */}
         {/* <Button variant="ghost" size="icon-sm" aria-label="북마크">
@@ -88,45 +75,44 @@ function RecipeDetailInner() {
               {recipe.description}
             </p>
             <div className="flex flex-wrap gap-2">
-              <Badge
-                variant="secondary"
-                className="h-7 gap-1 rounded-full px-2.5"
-              >
-                <Timer className="size-3.5 text-muted-foreground" />
-                <span className="text-xs font-medium text-muted-foreground">
-                  {recipe.time}
-                </span>
+              <Badge className="bg-green-100 text-green py-3">
+                <Users className="size-3" />
+                <span>{recipe.servings}인분</span>
               </Badge>
-              <Badge
-                className={`h-7 rounded-full px-2.5 text-xs font-medium ${getDifficultyStyle(recipe.difficulty)}`}
-              >
-                {recipe.difficulty}
+
+              <Badge className="bg-transparent text-muted-foreground py-3">
+                <Carrot className="size-3" />
+                <span>재료 {recipe.ingredients.length}개</span>
               </Badge>
-              <Badge className="h-7 rounded-full bg-foreground px-2.5 text-xs font-semibold text-background">
-                {recipe.servings} 인분
+
+              <Badge className="bg-transparent text-muted-foreground py-3">
+                <ListOrdered className="size-3" />
+                <span> {recipe.steps.length}단계</span>
               </Badge>
             </div>
           </div>
 
           {/* Unit Section */}
-          <div className="flex flex-col gap-3">
-            <h2 className="text-base font-bold text-foreground">계량</h2>
-            <div className="overflow-hidden rounded-[14px] bg-muted/50 py-1">
-              {recipe.units.map((unit) => (
-                <div
-                  key={unit.name}
-                  className="flex items-center justify-between px-4 py-2.5"
-                >
-                  <span className="text-sm font-medium text-foreground">
-                    {unit.name}
-                  </span>
-                  <span className="text-[13px] text-muted-foreground">
-                    {unit.unit}
-                  </span>
-                </div>
-              ))}
+          {!!recipe.units?.length && (
+            <div className="flex flex-col gap-3">
+              <h2 className="text-base font-bold text-foreground">계량</h2>
+              <div className="overflow-hidden rounded-[14px] bg-muted/50 py-1">
+                {recipe.units.map((unit) => (
+                  <div
+                    key={unit.name}
+                    className="flex items-center justify-between px-4 py-2.5"
+                  >
+                    <span className="text-sm font-medium text-foreground">
+                      {unit.name}
+                    </span>
+                    <span className="text-[13px] text-muted-foreground">
+                      {unit.unit}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Ingredients Section */}
           <div className="flex flex-col gap-3">

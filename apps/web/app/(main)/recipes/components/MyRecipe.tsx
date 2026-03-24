@@ -1,7 +1,7 @@
 "use client";
 
 import { BaseurlContext } from "@/components/provider/BaseurlProvider";
-import { MyRecipeCard } from "@/app/(main)/recipes/components/MyRecipeCard";
+import { RecipeCard } from "@/app/(main)/recipes/components/RecipeCard";
 import { useRecipes } from "@/app/(main)/recipes/hooks/use-recipes";
 import { RecipeState } from "@/hooks/use-recipes-store";
 import { BookOpen, Plus } from "lucide-react";
@@ -29,7 +29,7 @@ export function MyRecipe() {
   return (
     <div className="flex flex-col gap-3.5 w-full h-full">
       {recipes.length ? (
-        recipes.map((recipe, i) => <MyRecipeCard key={i} {...recipe} />)
+        recipes.map((recipe, i) => <RecipeCard key={i} {...recipe} />)
       ) : (
         <Empty>
           <EmptyIcon>

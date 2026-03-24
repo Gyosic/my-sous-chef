@@ -9,9 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { recommendSchema, type RecommendInput } from "@repo/db/types/recommend";
 import { useRouter } from "next/navigation";
 import { useRecipeStore } from "@/hooks/use-recipes-store";
-import { RecipeLoading } from "@/app/(main)/components/RecipeLoading";
 import { toast } from "@repo/ui/components/sonner";
 import { useState } from "react";
+import { Loading } from "@/components/shared/Loading";
 
 const queryClient = new QueryClient();
 interface HomeContentProps {
@@ -86,7 +86,20 @@ export function HomeContent({ userName, baseurl }: HomeContentProps) {
         </form>
       </div>
 
-      {loading && <RecipeLoading ingredients={form.getValues("ingredients")} />}
+      {loading && (
+        <Loading>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-[17px] font-semibold text-foreground">
+              AI가 레시피를 찾고 있어요
+            </p>
+            <p className="text-[13px] text-muted-foreground">
+              {form.getValues("ingredients").length
+                ? `${form.getValues("ingredients").join(", ")}로 만들 수 있는 요리를 분석 중...`
+                : "맞춤 레시피를 분석 중..."}
+            </p>
+          </div>
+        </Loading>
+      )}
     </QueryClientProvider>
   );
 }
