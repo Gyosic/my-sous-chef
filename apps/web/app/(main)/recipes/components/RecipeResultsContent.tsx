@@ -39,7 +39,7 @@ export function RecipeResultsContent() {
     <QueryClientProvider client={queryClient}>
       <div className="overflow-y-auto p-5 h-full">
         <Tabs
-          className="w-full max-w-md h-full"
+          className="w-full h-full"
           value={selectedTab}
           onValueChange={handleTabValueChange}
         >
