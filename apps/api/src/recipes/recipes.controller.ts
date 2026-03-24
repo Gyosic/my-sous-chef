@@ -9,11 +9,12 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { RecipesService } from "./recipes.service";
-import { type CreateRecipeDto } from "./dto/create-recipe.dto";
+import { createRecipeDto, type CreateRecipeDto } from "./dto/create-recipe.dto";
 import { type UpdateRecipeDto } from "./dto/update-recipe.dto";
 import { type AuthUser, JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { User } from "src/common/decorators/user.decorator";
 import { UsersService } from "src/users/users.service";
+import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
 
 @UseGuards(JwtAuthGuard)
 @Controller("/api/recipes")
@@ -26,14 +27,14 @@ export class RecipesController {
   @Post()
   async create(
     @User() user: AuthUser,
-    @Body() createRecipeDto: CreateRecipeDto,
+    @Body(new ZodValidationPipe(createRecipeDto)) body: CreateRecipeDto,
   ) {
     const { user: { id: userId } = {} } = await this.userService.findOneByEmail(
       user.email,
     );
 
     const data = await this.recipesService.create({
-      ...createRecipeDto,
+      ...body,
       userId: userId!,
     });
     return data;

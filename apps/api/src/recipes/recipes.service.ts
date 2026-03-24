@@ -13,7 +13,7 @@ export class RecipesService {
   async create(createRecipeDto: CreateRecipeDto & { userId: string }) {
     const [recipe] = await this.db
       .insert(schema.recipes)
-      .values(createRecipeDto)
+      .values({ ...createRecipeDto, type: "db" })
       .returning();
 
     return { recipe };

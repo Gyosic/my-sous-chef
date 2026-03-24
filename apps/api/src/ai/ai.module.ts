@@ -7,7 +7,13 @@ import { TtsService } from "./services/tts.service";
 
 @Global()
 @Module({
-  providers: [AiService, ClaudeProvider, OpenAiProvider, SttService, TtsService],
+  providers: [
+    AiService,
+    ClaudeProvider,
+    OpenAiProvider,
+    SttService,
+    TtsService,
+  ],
   exports: [AiService, SttService, TtsService],
 })
 export class AiModule {}

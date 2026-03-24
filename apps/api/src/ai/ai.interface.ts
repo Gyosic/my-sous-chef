@@ -1,3 +1,5 @@
+import { RecipeInput } from "@repo/db/types/recipes";
+
 export interface ConversationMessage {
   role: "user" | "assistant";
   content: string;
@@ -17,15 +19,7 @@ export interface AiProvider {
 }
 
 export interface AiRecipeResponse {
-  recipes: {
-    name: string;
-    description: string;
-    steps: string[];
-    ingredients: string[];
-    time: string;
-    difficulty: string;
-    matchRate: number;
-  }[];
+  recipes: (RecipeInput & { type: string })[];
 }
 
 export const AI_PROVIDER = Symbol("AI_PROVIDER");

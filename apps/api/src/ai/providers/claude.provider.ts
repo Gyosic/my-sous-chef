@@ -6,6 +6,7 @@ import {
   AiRecipeResponse,
   ConversationMessage,
 } from "../ai.interface";
+import { RecipeInput } from "@repo/db/types/recipes";
 
 @Injectable()
 export class ClaudeProvider implements AiProvider {
@@ -35,9 +36,17 @@ export class ClaudeProvider implements AiProvider {
     const text =
       response?.content?.[0]?.type === "text" ? response.content[0].text : "";
 
-    const recipes: AiRecipeResponse = JSON.parse(text);
+    try {
+      const parsed: { recipes: RecipeInput[] } = JSON.parse(text);
+      const recipes = parsed.recipes.map((recipe) => ({
+        ...recipe,
+        type: "ai",
+      }));
 
-    return recipes;
+      return { recipes };
+    } catch {
+      return { recipes: [] };
+    }
   }
 
   async *streamCookingGuidance(
@@ -78,6 +87,6 @@ ${prompt ? `추가 요청: ${prompt}` : ""}
 이 재료로 만들 수 있는 레시피 3개를 추천해주세요.
 steps는 최대한 상세하게, 요리 초보자도 쉽게 따라할 수 있게 설명해주세요.
 반드시 아래 JSON 형식으로만 응답하세요:
-{"recipes": [{"name": "요리명", "description": "간단한 설명", "steps": [{"title":"1단계 타이틀","description": "1단계 설명"}, {"title":"2단계 타이틀","description": "2단계 설명"}], "ingredients": [{"name":"재료명", "amount": "필요한재료량", "optional": "선택사항(Boolean)"}, {"name":"재료명", "amount": "필요한재료량", "optional": "선택사항(Boolean)"}],"units": [{"name":"단위명칭(1큰술)","unit":"계량단위(15ml)"},{{"name":"단위명칭(1꼬집)","unit":"계량단위(2g)"}], "servings": "인분단위 분량(숫자만 소수점가능)", "time": "예상소요시간", "difficulty": "난이도(쉬움|보통|어려움)", "matchRate": "재료매칭률(숫자만)"}]}`;
+{"recipes": [{"name": "요리명", "description": "간단한 설명", "steps": [{"title":"1단계 타이틀","description": "1단계 설명"}, {"title":"2단계 타이틀","description": "2단계 설명"}], "ingredients": [{"name":"재료명", "amount": "필요한재료량", "optional": "선택사항(Boolean)"}, {"name":"재료명", "amount": "필요한재료량", "optional": "선택사항(Boolean)"}],"units": [{"name":"단위명칭(1큰술)","unit":"계량단위(15ml)"},{{"name":"단위명칭(1꼬집)","unit":"계량단위(2g)"}], "servings": "인분단위 분량(숫자만 소수점가능)"}]}`;
   }
 }
