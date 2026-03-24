@@ -14,6 +14,7 @@ export function TextField() {
     field,
     fieldModel,
     className,
+    inputCls,
     labelPosition = "top",
     isDuplicate = true,
     onDuplicateCheck,
@@ -29,7 +30,7 @@ export function TextField() {
       >
         <div className="flex w-full items-center gap-2">
           <div className="relative flex w-full items-center gap-2">
-            <InputGroup>
+            <InputGroup className={cn(inputCls)}>
               <InputGroupInput
                 readOnly={fieldModel.readOnly}
                 placeholder={fieldModel?.placeholder ?? `입력하세요.`}

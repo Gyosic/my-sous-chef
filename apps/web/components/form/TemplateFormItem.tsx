@@ -11,6 +11,9 @@ import { TextField } from "./fields/TextField";
 import { TagField } from "./fields/TagField";
 import { createContext, useContext } from "react";
 import { TextareaField } from "@/components/form/fields/TextareaField";
+import { NestedField } from "@/components/form/fields/NestedField";
+import { NumberField } from "@/components/form/fields/NumberField";
+import { ToggleField } from "@/components/form/fields/ToggleField";
 
 export interface FieldModel {
   name: string;
@@ -41,6 +44,7 @@ export interface TemplateFormItemProps<
   className?: string;
   labelPosition?: "top" | "left";
   labelCls?: string;
+  inputCls?: string;
   isForm?: boolean;
   isDuplicate?: boolean;
   onDuplicateCheck?: (key: string, value: string) => void;
@@ -53,6 +57,7 @@ interface TemplateFormItemContextValue {
   className?: string;
   labelPosition?: "top" | "left";
   labelCls?: string;
+  inputCls?: string;
   isForm?: boolean;
   isDuplicate?: boolean;
   onDuplicateCheck?: (key: string, value: string) => void;
@@ -80,6 +85,12 @@ export function TemplateFormItem<T extends FieldValues, K extends FieldPath<T>>(
         return <TagField />;
       case "textarea":
         return <TextareaField />;
+      case "nested":
+        return <NestedField />;
+      case "number":
+        return <NumberField />;
+      case "toggle":
+        return <ToggleField />;
       default:
         return <TextField />;
     }

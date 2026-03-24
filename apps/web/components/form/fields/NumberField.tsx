@@ -6,16 +6,16 @@ import { cn } from "@repo/ui/lib/utils";
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupTextarea,
+  InputGroupInput,
 } from "@repo/ui/components/input-group";
 
-export function TextareaField() {
+export function NumberField() {
   const {
     field,
     fieldModel,
     className,
-    inputCls,
     labelPosition = "top",
+    inputCls,
   } = useTemplateFormItem();
 
   return (
@@ -29,11 +29,14 @@ export function TextareaField() {
         <div className="flex w-full items-center gap-2">
           <div className="relative flex w-full items-center gap-2">
             <InputGroup className={cn(inputCls)}>
-              <InputGroupTextarea
+              <InputGroupInput
                 readOnly={fieldModel.readOnly}
-                placeholder={fieldModel?.placeholder ?? `입력하세요.`}
+                placeholder={fieldModel?.placeholder ?? `숫자 입력`}
                 {...field}
+                type="number"
+                step={fieldModel?.step}
                 value={field?.value ?? ""}
+                className=""
                 onBlur={() => {
                   field.onBlur();
                   // fieldModel?.onBlur?.({ getValues, setError, clearErrors });
@@ -45,7 +48,7 @@ export function TextareaField() {
                   <Button
                     variant="ghost"
                     type="button"
-                    className="absolute top-0 right-0 hover:bg-transparent hover:text-destructive"
+                    className="hover:bg-transparent hover:text-destructive"
                     onClick={() => field.onChange(undefined)}
                   >
                     <X />
