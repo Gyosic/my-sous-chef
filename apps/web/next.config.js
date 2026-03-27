@@ -9,6 +9,7 @@ const nextConfig = {
   transpilePackages: ["@repo/ui", "@repo/db"],
   output: "standalone",
   outputFileTracingRoot: path.join(__dirname, "../../"),
+  reactCompiler: true,
 };
 
 export default nextConfig;
