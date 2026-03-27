@@ -1,6 +1,10 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
+const AnimatePresence = dynamic(() =>
+  import("framer-motion").then((mod) => mod.AnimatePresence),
+);
+import { motion } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import { useChatStore } from "@/hooks/use-chat-store";
 import { Button } from "@repo/ui/components/button";
