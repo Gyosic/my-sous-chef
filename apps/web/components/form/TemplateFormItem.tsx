@@ -6,14 +6,37 @@ import type {
   FieldPath,
   FieldValues,
 } from "react-hook-form";
-import { PasswordField } from "./fields/PasswordField";
-import { TextField } from "./fields/TextField";
-import { TagField } from "./fields/TagField";
 import { createContext, useContext } from "react";
-import { TextareaField } from "@/components/form/fields/TextareaField";
-import { NestedField } from "@/components/form/fields/NestedField";
-import { NumberField } from "@/components/form/fields/NumberField";
-import { ToggleField } from "@/components/form/fields/ToggleField";
+import dynamic from "next/dynamic";
+const PasswordField = dynamic(() =>
+  import("@/components/form/fields/PasswordField").then(
+    (mod) => mod.PasswordField,
+  ),
+);
+
+const TextField = dynamic(() =>
+  import("@/components/form/fields/TextField").then((mod) => mod.TextField),
+);
+const TagField = dynamic(() =>
+  import("@/components/form/fields/TagField").then((mod) => mod.TagField),
+);
+const TextareaField = dynamic(() =>
+  import("@/components/form/fields/TextareaField").then(
+    (mod) => mod.TextareaField,
+  ),
+);
+const NestedField = dynamic(() =>
+  import("@/components/form/fields/NestedField").then((mod) => mod.NestedField),
+);
+const NumberField = dynamic(() =>
+  import("@/components/form/fields/NumberField").then((mod) => mod.NumberField),
+);
+const ToggleField = dynamic(() =>
+  import("@/components/form/fields/ToggleField").then((mod) => mod.ToggleField),
+);
+const DateField = dynamic(() =>
+  import("@/components/form/fields/DateField").then((mod) => mod.DateField),
+);
 
 export interface FieldModel {
   name: string;
@@ -91,6 +114,8 @@ export function TemplateFormItem<T extends FieldValues, K extends FieldPath<T>>(
         return <NumberField />;
       case "toggle":
         return <ToggleField />;
+      case "date":
+        return <DateField />;
       default:
         return <TextField />;
     }

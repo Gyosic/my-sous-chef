@@ -45,7 +45,14 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
-        <Toaster />
+        <Toaster
+          toastOptions={{
+            classNames: {
+              toast: "cn-toast",
+              description: "!text-muted-foreground",
+            },
+          }}
+        />
       </body>
     </html>
   );
