@@ -1,159 +1,130 @@
-# Turborepo starter
+# My Sous Chef
 
-This Turborepo starter is maintained by the Turborepo core team.
+AI 기반 요리 어시스턴트 웹 애플리케이션입니다. 보유한 재료를 입력하면 AI가 레시피를 추천해주고, 요리 중에는 음성/텍스트로 실시간 AI 요리 가이드를 받을 수 있습니다.
 
-## Using this example
+## 주요 기능
 
-Run the following command:
+- **AI 레시피 추천** - 재료를 입력하면 Claude 또는 GPT가 맞춤 레시피 3개를 추천
+- **실시간 요리 가이드** - WebSocket 기반 AI 요리 어시스턴트가 단계별로 안내
+- **음성 인터랙션** - 요리 중 핸즈프리 음성 입력(Whisper STT) 및 음성 출력(OpenAI TTS)
+- **레시피 관리** - 추천받은 레시피 저장 및 직접 레시피 등록
+- **재료 관리** - 보유 재료 및 유통기한 관리
+- **소셜 로그인** - Google, Naver OAuth 지원
 
-```sh
-npx create-turbo@latest
+## 기술 스택
+
+| 영역     | 기술                                                           |
+| -------- | -------------------------------------------------------------- |
+| Frontend | Next.js 16, React 19, Tailwind CSS v4, Zustand, TanStack Query |
+| Backend  | NestJS 11, Socket.IO, Drizzle ORM                              |
+| Database | PostgreSQL                                                     |
+| AI       | Anthropic Claude, OpenAI GPT-4.1, Whisper, TTS                 |
+| Auth     | NextAuth v5 (Google, Naver OAuth)                              |
+| Infra    | Turborepo, pnpm, Docker                                        |
+
+## 프로젝트 구조
+
+```
+my-sous-chef/
+├── apps/
+│   ├── api/           # NestJS 백엔드 API (port 4000)
+│   └── web/           # Next.js 프론트엔드 (port 3000)
+├── packages/
+│   ├── db/            # 공유 DB 스키마 및 타입 (Drizzle ORM)
+│   ├── ui/            # 공유 UI 컴포넌트 (shadcn/ui)
+│   ├── eslint-config/ # 공유 ESLint 설정
+│   └── typescript-config/ # 공유 TypeScript 설정
 ```
 
-## What's inside?
+## 시작하기
 
-This Turborepo includes the following packages/apps:
+### 사전 요구사항
 
-### Apps and Packages
+- Node.js 20+
+- pnpm 10+
+- PostgreSQL
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### 환경 변수 설정
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+**apps/web/.env**
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
+```env
+API_BASEURL=http://localhost:4000
+NEXT_PUBLIC_API_URL=http://localhost:4000
+AUTH_URL=http://localhost:3000
+AUTH_SECRET=your-auth-secret
+AUTH_DRIZZLE_URL=postgresql://user:password@localhost:5432/chef
+AUTH_GOOGLE_ID=your-google-client-id
+AUTH_GOOGLE_SECRET=your-google-client-secret
+AUTH_NAVER_ID=your-naver-client-id
+AUTH_NAVER_SECRET=your-naver-client-secret
+DATABASE_URL=postgresql://user:password@localhost:5432/chef
 ```
 
-Without global `turbo`, use your package manager:
+**apps/api/.env**
 
-```sh
-cd my-turborepo
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```env
+PORT=4000
+DATABASE_URL=postgresql://user:password@localhost:5432/chef
+AUTH_SECRET=your-auth-secret
+ANTHROPIC_API_KEY=your-anthropic-api-key
+OPENAI_API_KEY=your-openai-api-key
+CORS_ORIGIN=http://localhost:3000
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+### 설치 및 실행
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+```bash
+# 의존성 설치
+pnpm install
 
-```sh
-turbo build --filter=docs
+# 데이터베이스 마이그레이션
+pnpm --filter @repo/db db:migrate
+
+# 전체 개발 서버 실행
+pnpm dev
 ```
 
-Without global `turbo`:
+### 개별 실행
 
-```sh
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
+```bash
+# 프론트엔드만
 turbo dev --filter=web
+
+# 백엔드만
+turbo dev --filter=api
+
+# DB Studio (시각적 데이터 관리)
+pnpm --filter @repo/db db:studio
 ```
 
-Without global `turbo`:
+### 빌드
 
-```sh
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+```bash
+# 전체 빌드
+npm run build:script
+
+# Docker 빌드 (프론트엔드)
+docker build -t my-sous-chef-web .
 ```
 
-### Remote Caching
+## API 엔드포인트
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+### REST API
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+| Method | Endpoint                                    | 설명               |
+| ------ | ------------------------------------------- | ------------------ |
+| GET    | `/api/recommends?ingredients=...&model=...` | AI 레시피 추천     |
+| POST   | `/api/recipes`                              | 레시피 저장        |
+| GET    | `/api/recipes`                              | 저장된 레시피 목록 |
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+### WebSocket (`/cooking` namespace)
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+| Event                       | 방향             | 설명               |
+| --------------------------- | ---------------- | ------------------ |
+| `start_session`             | Client -> Server | 요리 세션 시작     |
+| `text_message`              | Client -> Server | 텍스트 메시지 전송 |
+| `audio_chunk` / `audio_end` | Client -> Server | 음성 입력          |
+| `ai_response_chunk`         | Server -> Client | AI 응답 스트리밍   |
+| `ai_audio_chunk`            | Server -> Client | TTS 음성 출력      |
+| `end_session`               | Client -> Server | 세션 종료          |
