@@ -8,6 +8,7 @@ import { RecommendsModule } from "./recommends/recommends.module";
 import { AiModule } from "./ai/ai.module";
 import { CookingSessionModule } from "./cooking-session/cooking-session.module";
 import { RecipesModule } from "./recipes/recipes.module";
+import { IngredientsModule } from "./ingredients/ingredients.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RecipesModule } from "./recipes/recipes.module";
     RecommendsModule,
     CookingSessionModule,
     RecipesModule,
+    IngredientsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

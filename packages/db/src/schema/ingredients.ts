@@ -2,7 +2,9 @@ import { pgTable, text, integer, timestamp, date } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const ingredients = pgTable("ingredients", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   userId: text("user_id")
     .notNull()
     .references(() => users.id),
