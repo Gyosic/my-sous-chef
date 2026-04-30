@@ -22,6 +22,20 @@
       "when": 1774339919562,
       "tag": "0002_public_blonde_phantom",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1777537769646,
+      "tag": "0003_material_azazel",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1777537833339,
+      "tag": "0004_next_jigsaw",
+      "breakpoints": true
     }
   ]
 }

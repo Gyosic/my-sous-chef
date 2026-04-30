@@ -12,6 +12,7 @@ export const ingredients = pgTable("ingredients", {
   amount: integer("amount").notNull(),
   unit: text("unit").notNull(),
   expiration: date("expiration"),
+  purchase_date: date("purchase_date"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
