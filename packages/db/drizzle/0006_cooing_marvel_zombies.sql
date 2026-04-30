@@ -1,0 +1,1 @@
+CREATE TYPE "public"."recipe_source" AS ENUM('original', 'forked', 'ai');

@@ -3,4 +3,4 @@ export { categories } from "./categories";
 export { users } from "./users";
 export { accounts } from "./accounts";
 export { ingredients } from "./ingredients";
-export { recipes } from "./recipes";
+export { recipes, recipeSourceEnum } from "./recipes";
