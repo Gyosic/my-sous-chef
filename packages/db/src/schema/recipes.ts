@@ -41,7 +41,15 @@ export const recipes = pgTable("recipes", {
     (): AnyPgColumn => recipes.id,
     { onDelete: "set null" },
   ),
-  category_id: text().references(() => categories.id),
+  dishCategoryId: text("dish_category_id").references(() => categories.id, {
+    onDelete: "set null",
+  }),
+  cuisineCategoryId: text("cuisine_category_id").references(
+    () => categories.id,
+    {
+      onDelete: "set null",
+    },
+  ),
   like: integer().default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -51,6 +59,16 @@ export const recipesRelations = relations(recipes, ({ one, many }) => ({
   author: one(users, {
     fields: [recipes.userId],
     references: [users.id],
+  }),
+  dishCategory: one(categories, {
+    fields: [recipes.dishCategoryId],
+    references: [categories.id],
+    relationName: "dishCategory",
+  }),
+  cuisineCategory: one(categories, {
+    fields: [recipes.cuisineCategoryId],
+    references: [categories.id],
+    relationName: "cuisineCategory",
   }),
   forkedFrom: one(recipes, {
     fields: [recipes.forkedFromId],

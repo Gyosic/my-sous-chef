@@ -5,7 +5,8 @@
     "strictNullChecks": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "composite": true
+    "composite": true,
+    "types": ["node"]
   },
   "include": ["src", "drizzle.config.ts"],
   "exclude": ["node_modules", "dist"]

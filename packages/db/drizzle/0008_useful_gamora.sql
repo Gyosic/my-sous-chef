@@ -1,0 +1,1 @@
+CREATE TYPE "public"."category_type" AS ENUM('dish', 'cuisine');
