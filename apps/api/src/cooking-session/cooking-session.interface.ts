@@ -1,4 +1,4 @@
-import { ConversationMessage } from "src/ai/ai.interface";
+import { ConversationMessage } from "@/ai/ai.interface";
 
 export interface CookingSession {
   sessionId: string;

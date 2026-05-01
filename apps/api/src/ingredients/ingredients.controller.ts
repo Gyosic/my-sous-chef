@@ -17,10 +17,10 @@ import {
   updateIngredientDto,
   type UpdateIngredientDto,
 } from "./dto/update-ingredient.dto";
-import { type AuthUser, JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { User } from "src/common/decorators/user.decorator";
-import { UsersService } from "src/users/users.service";
-import { ZodValidationPipe } from "src/common/pipes/zod-validation.pipe";
+import { type AuthUser, JwtAuthGuard } from "@/auth/jwt-auth.guard";
+import { User } from "@/common/decorators/user.decorator";
+import { UsersService } from "@/users/users.service";
+import { ZodValidationPipe } from "@/common/pipes/zod-validation.pipe";
 
 @UseGuards(JwtAuthGuard)
 @Controller("/api/ingredients")
