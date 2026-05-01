@@ -3,7 +3,7 @@ import { type CreateRecipeDto } from "./dto/create-recipe.dto";
 import { type UpdateRecipeDto } from "./dto/update-recipe.dto";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "@repo/db/schema";
-import { DRIZZLE } from "database/database.module";
+import { DRIZZLE } from "@/database/database.module";
 import { eq } from "drizzle-orm";
 
 @Injectable()
@@ -13,7 +13,7 @@ export class RecipesService {
   async create(createRecipeDto: CreateRecipeDto & { userId: string }) {
     const [recipe] = await this.db
       .insert(schema.recipes)
-      .values({ ...createRecipeDto, type: "db" })
+      .values({ ...createRecipeDto, source: "original" })
       .returning();
 
     return { recipe };

@@ -3,8 +3,8 @@ import { type CreateIngredientDto } from "./dto/create-ingredient.dto";
 import { type UpdateIngredientDto } from "./dto/update-ingredient.dto";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "@repo/db/schema";
-import { DRIZZLE } from "database/database.module";
 import { and, eq } from "drizzle-orm";
+import { DRIZZLE } from "@/database/database.module";
 
 @Injectable()
 export class IngredientsService {
