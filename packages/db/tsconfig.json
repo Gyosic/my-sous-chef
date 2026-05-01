@@ -6,7 +6,10 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "composite": true,
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src", "drizzle.config.ts"],
   "exclude": ["node_modules", "dist"]
