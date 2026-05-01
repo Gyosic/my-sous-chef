@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable, BadRequestException, Inject } from "@nestjs/common";
 import { ClaudeProvider } from "./providers/claude.provider";
 import { OpenAiProvider } from "./providers/openai.provider";
 import {
@@ -6,6 +6,9 @@ import {
   AiRecipeResponse,
   ConversationMessage,
 } from "./ai.interface";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import * as schema from "@repo/db/schema";
+import { DRIZZLE } from "@/database/database.module";
 
 @Injectable()
 export class AiService {
@@ -14,11 +17,25 @@ export class AiService {
   constructor(
     private claudeProvider: ClaudeProvider,
     private openAiProvider: OpenAiProvider,
+    @Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>,
   ) {
     this.providers = new Map<string, AiProvider>([
       ["claude", this.claudeProvider],
       ["openai", this.openAiProvider],
     ]);
+  }
+  private async loadCategories() {
+    const all = await this.db.select().from(schema.categories);
+
+    const dish = new Map(
+      all.filter((c) => c.type === "dish").map((c) => [c.slug, c.id]),
+    );
+    const cuisine = new Map(
+      all.filter((c) => c.type === "cuisine").map((c) => [c.slug, c.id]),
+    );
+
+    const category = { dish, cuisine };
+    return category;
   }
 
   async generateRecipe(
@@ -27,7 +44,9 @@ export class AiService {
     prompt: string,
   ): Promise<AiRecipeResponse> {
     const provider = this.getProvider(model);
-    return provider.generateRecipe(ingredients, prompt);
+    const { dish, cuisine } = await this.loadCategories();
+
+    return provider.generateRecipe(ingredients, prompt, dish, cuisine);
   }
 
   streamCookingGuidance(

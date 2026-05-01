@@ -6,7 +6,7 @@ import {
   AiRecipeResponse,
   ConversationMessage,
 } from "../ai.interface";
-import { RecipeInput } from "@repo/db/types/recipes";
+import { buildPrompt, parseRecipe } from "@/ai/providers/utils";
 
 @Injectable()
 export class OpenAiProvider implements AiProvider {
@@ -21,31 +21,33 @@ export class OpenAiProvider implements AiProvider {
   async generateRecipe(
     ingredients: string[],
     prompt: string,
+    dishCategories: Map<string, string>,
+    cuisineCategories: Map<string, string>,
   ): Promise<AiRecipeResponse> {
+    const dishOptions = Array.from(dishCategories.keys());
+    const cuisineOptions = Array.from(cuisineCategories.keys());
+
     const response = await this.client.chat.completions.create({
       model: "gpt-4.1-mini",
       response_format: { type: "json_object" },
       messages: [
         {
           role: "user",
-          content: this.buildPrompt(ingredients, prompt),
+          content: buildPrompt(
+            ingredients,
+            prompt,
+            dishOptions,
+            cuisineOptions,
+          ),
         },
       ],
     });
 
     const text = response?.choices?.[0]?.message.content ?? "";
 
-    try {
-      const parsed: { recipes: RecipeInput[] } = JSON.parse(text);
-      const recipes = parsed.recipes.map((recipe) => ({
-        ...recipe,
-        type: "ai",
-      }));
+    const recipes = parseRecipe(text, dishCategories, cuisineCategories);
 
-      return { recipes };
-    } catch {
-      return { recipes: [] };
-    }
+    return { recipes };
   }
 
   async *streamCookingGuidance(
@@ -56,7 +58,7 @@ export class OpenAiProvider implements AiProvider {
     const messages: OpenAI.ChatCompletionMessageParam[] = [
       { role: "system", content: systemPrompt },
       ...conversationHistory.map((msg) => ({
-        role: msg.role as "user" | "assistant",
+        role: msg.role,
         content: msg.content,
       })),
       { role: "user" as const, content: userMessage },
@@ -74,16 +76,5 @@ export class OpenAiProvider implements AiProvider {
         yield content;
       }
     }
-  }
-
-  private buildPrompt(ingredients: string[], prompt: string): string {
-    return `당신은 요리 전문가입니다.
-사용자가 가진 재료: ${ingredients.join(", ")}
-${prompt ? `추가 요청: ${prompt}` : ""}
-
-이 재료로 만들 수 있는 레시피 3개를 추천해주세요.
-steps는 최대한 상세하게, 요리 초보자도 쉽게 따라할 수 있게 설명해주세요.
-반드시 아래 JSON 형식으로만 응답하세요:
-{"recipes": [{"name": "요리명", "description": "간단한 설명", "steps": [{"title":"1단계 타이틀","description": "1단계 설명"}, {"title":"2단계 타이틀","description": "2단계 설명"}], "ingredients": [{"name":"재료명", "amount": "필요한재료량", "optional": "선택사항(Boolean)"}, {"name":"재료명", "amount": "필요한재료량", "optional": "선택사항(Boolean)"}],"units": [{"name":"단위명칭(1큰술)","unit":"계량단위(15ml)"},{{"name":"단위명칭(1꼬집)","unit":"계량단위(2g)"}], "servings": "인분단위 분량(숫자만 소수점가능)"}]}`;
   }
 }
