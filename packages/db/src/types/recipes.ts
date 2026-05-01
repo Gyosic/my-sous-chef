@@ -1,5 +1,5 @@
-import { RECIPE_SOURCE } from "@/schema/recipes";
 import z from "zod";
+import { RECIPE_SOURCE } from "../schema/recipes";
 
 const stepSchema = z.object({
   title: z
