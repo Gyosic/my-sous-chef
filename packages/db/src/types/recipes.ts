@@ -1,4 +1,5 @@
 import z from "zod";
+import { RECIPE_SOURCE } from "../schema/recipes";
 
 const stepSchema = z.object({
   title: z
@@ -77,6 +78,10 @@ export const recipeSchema = z.object({
   servings: z.coerce
     .number("숫자만 입력해주세요.")
     .meta({ name: "인분", type: "number", step: 0.5, default: 1 }),
+  source: z.enum(RECIPE_SOURCE),
+  forkedFromId: z.string().optional(),
+  dishCategoryId: z.string().optional(),
+  cuisineCategoryId: z.string().optional(),
 });
 
 export type RecipeInput = z.input<typeof recipeSchema>;

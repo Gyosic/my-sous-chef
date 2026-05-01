@@ -13,11 +13,8 @@ import { categories } from "./categories";
 
 import { relations } from "drizzle-orm";
 
-export const recipeSourceEnum = pgEnum("recipe_source", [
-  "original", // 내가 직접 작성
-  "forked", // 다른 사용자 레시피 저장
-  "ai", // AI 생성
-]);
+export const RECIPE_SOURCE = ["original", "forked", "ai"] as const;
+export const recipeSourceEnum = pgEnum("recipe_source", RECIPE_SOURCE);
 
 export const recipes = pgTable("recipes", {
   id: text("id")
