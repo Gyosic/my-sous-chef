@@ -78,6 +78,10 @@ export const recipeSchema = z.object({
   servings: z.coerce
     .number("숫자만 입력해주세요.")
     .meta({ name: "인분", type: "number", step: 0.5, default: 1 }),
+  share: z
+    .boolean()
+    .default(false)
+    .meta({ name: "공개여부", type: "boolean", default: false }),
   source: z.enum(RECIPE_SOURCE),
   forkedFromId: z.string().optional(),
   dishCategoryId: z.string().optional(),

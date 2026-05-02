@@ -7,6 +7,7 @@ import {
   integer,
   pgEnum,
   AnyPgColumn,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { categories } from "./categories";
@@ -48,6 +49,7 @@ export const recipes = pgTable("recipes", {
     },
   ),
   like: integer().default(0).notNull(),
+  share: boolean().default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
