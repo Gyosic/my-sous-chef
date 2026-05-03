@@ -69,7 +69,7 @@ export class CookingSessionGateway
         await this.cookingSessionService.synthesizeGreeting(greeting);
       client.emit("ai_audio_chunk", { audio: audioBuffer });
     } catch (err) {
-      this.logger.error(`Greeting TTS failed: ${err}`);
+      this.logger.error(`Greeting TTS failed: ${err as Error}`);
     }
 
     client.emit("ai_response_end", {});
@@ -116,7 +116,7 @@ export class CookingSessionGateway
       // AI + TTS streaming
       await this.streamResponse(client, sessionId, transcription);
     } catch (err) {
-      this.logger.error(`Audio processing error: ${err}`);
+      this.logger.error(`Audio processing error: ${err as Error}`);
       client.emit("error", { message: "음성 처리 중 오류가 발생했습니다" });
     }
   }
@@ -170,7 +170,7 @@ export class CookingSessionGateway
 
       client.emit("ai_response_end", {});
     } catch (err) {
-      this.logger.error(`Stream response error: ${err}`);
+      this.logger.error(`Stream response error: ${err as Error}`);
       client.emit("error", { message: "AI 응답 처리 중 오류가 발생했습니다" });
     }
   }

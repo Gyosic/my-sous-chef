@@ -1,8 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { randomUUID } from "crypto";
-import { AiService } from "src/ai/ai.service";
-import { SttService } from "src/ai/services/stt.service";
-import { TtsService } from "src/ai/services/tts.service";
+import { AiService } from "@/ai/ai.service";
+import { SttService } from "@/ai/services/stt.service";
+import { TtsService } from "@/ai/services/tts.service";
 import {
   CookingSession,
   RecipeData,
@@ -37,7 +37,9 @@ export class CookingSessionService {
     this.sessions.set(sessionId, session);
     this.resetSessionTimeout(sessionId);
 
-    this.logger.log(`Session created: ${sessionId} for recipe: ${payload.recipe.name}`);
+    this.logger.log(
+      `Session created: ${sessionId} for recipe: ${payload.recipe.name}`,
+    );
     return session;
   }
 
@@ -56,7 +58,8 @@ export class CookingSessionService {
   }
 
   async transcribeAudio(audioBuffer: Buffer): Promise<string> {
-    return this.sttService.transcribe(audioBuffer);
+    const text = await this.sttService.transcribe(audioBuffer);
+    return text;
   }
 
   async synthesizeGreeting(text: string): Promise<Buffer> {
@@ -100,10 +103,10 @@ export class CookingSessionService {
             const audioBuffer = await this.ttsService.synthesize(sentence);
             yield { type: "audio", data: audioBuffer };
           } catch (err) {
-            this.logger.error(`TTS failed for sentence: ${err}`);
+            this.logger.error(`TTS failed for sentence: ${err as Error}`);
           }
         }
-        sentenceBuffer = sentenceBuffer.slice(sentenceMatch[1]!.length);
+        sentenceBuffer = sentenceBuffer.slice(sentenceMatch[1].length);
       }
     }
 
@@ -114,7 +117,7 @@ export class CookingSessionService {
         const audioBuffer = await this.ttsService.synthesize(remaining);
         yield { type: "audio", data: audioBuffer };
       } catch (err) {
-        this.logger.error(`TTS failed for remaining text: ${err}`);
+        this.logger.error(`TTS failed for remaining text: ${err as Error}`);
       }
     }
 
@@ -126,9 +129,7 @@ export class CookingSessionService {
   }
 
   private buildSystemPrompt(recipe: RecipeData): string {
-    const steps = recipe.steps
-      .map((step, i) => `${i + 1}. ${step}`)
-      .join("\n");
+    const steps = recipe.steps.map((step, i) => `${i + 1}. ${step}`).join("\n");
 
     return `당신은 친절한 요리 도우미입니다.
 현재 요리: ${recipe.name}
