@@ -47,7 +47,7 @@ export function HomeContent({ userName, baseurl }: HomeContentProps) {
       });
     } finally {
       setLoading(false);
-      router.push(`/recipes`);
+      router.push(`/`);
     }
   });
 

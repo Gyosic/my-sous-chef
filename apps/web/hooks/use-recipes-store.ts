@@ -3,7 +3,6 @@ import { create } from "zustand";
 
 export type RecipeState = RecipeOutput & {
   id: string;
-  type: string;
 };
 
 interface RecipeStore {

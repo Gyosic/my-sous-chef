@@ -7,21 +7,23 @@ import {
 import { BaseurlContext } from "@/components/provider/BaseurlProvider";
 import { Loading } from "@/components/shared/Loading";
 import { TopBar } from "@/components/shared/TopBar";
+import { actionFetch, getLocalStorage, setLocalStorage } from "@/lib/api";
+import { extractErrorMessage } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type RecipeInput, recipeSchema } from "@repo/db/types/recipes";
 import { Button } from "@repo/ui/components/button";
 import { FieldGroup } from "@repo/ui/components/field";
 import { toast } from "@repo/ui/components/sonner";
+import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 export function RecipeRegistrate() {
   const router = useRouter();
   const { baseurl } = useContext(BaseurlContext);
   const { data: sessionData } = useSession();
-  const [loading, setLoading] = useState(false);
 
   const form = useForm<RecipeInput>({
     resolver: zodResolver(recipeSchema),
@@ -34,11 +36,11 @@ export function RecipeRegistrate() {
     ),
   });
   const { handleSubmit } = form;
-  const onSubmit = handleSubmit(
-    async (inputs) => {
-      try {
-        setLoading(true);
-        const res = await fetch(new URL("/api/recipes", baseurl), {
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (inputs: RecipeInput) => {
+      if (sessionData) {
+        await actionFetch(new URL("/api/recipes", baseurl), {
           method: "POST",
           body: JSON.stringify(inputs),
           headers: {
@@ -46,18 +48,22 @@ export function RecipeRegistrate() {
             "Content-Type": "application/json",
           },
         });
-
-        if (!res.ok) toast.error("[오류]", { description: await res.text() });
-        else {
-          toast.success("레피시를 등록했습니다.");
-          router.push("/recipes");
-        }
-      } catch (err) {
-        toast.error("[오류]", { description: (err as Error)?.message ?? "" });
-      } finally {
-        setLoading(false);
+      } else {
+        const recipes = getLocalStorage("recipes") || [];
+        setLocalStorage("recipes", [...recipes, inputs]);
       }
     },
+    onSuccess: () => {
+      toast.success("레피시를 등록했습니다.");
+      router.push("/");
+    },
+    onError: (err) => {
+      toast.error(extractErrorMessage(err, "레시피 등록에 실패했습니다."));
+    },
+  });
+
+  const onSubmit = handleSubmit(
+    async (inputs) => mutate(inputs),
     (invalid) => console.info(invalid, form.control._fields),
   );
 
@@ -68,7 +74,7 @@ export function RecipeRegistrate() {
       </TopBar>
       <FieldGroup className="px-8 py-4">
         {Object.entries(recipeSchema.shape).map(([key, { meta }]) => {
-          return (
+          return meta() ? (
             <Controller
               key={key}
               name={key as keyof RecipeInput}
@@ -82,12 +88,12 @@ export function RecipeRegistrate() {
                 />
               )}
             ></Controller>
-          );
+          ) : null;
         })}
         <Button>저장</Button>
       </FieldGroup>
 
-      {loading && (
+      {isPending && (
         <Loading>
           <div className="flex flex-col items-center gap-2">
             <p className="text-[17px] font-semibold text-foreground">

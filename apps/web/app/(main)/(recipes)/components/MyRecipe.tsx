@@ -5,7 +5,6 @@ import { RecipeCard } from "@/app/(main)/(recipes)/components/RecipeCard";
 import { useRecipes } from "@/app/(main)/(recipes)/hooks/use-recipes";
 import { RecipeState } from "@/hooks/use-recipes-store";
 import { BookOpen, Plus } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
 import {
   Empty,
@@ -17,10 +16,9 @@ import {
 export function MyRecipe() {
   const { baseurl } = useContext(BaseurlContext);
 
-  const { data: sessionData } = useSession();
   const [recipes, setRecipes] = useState<RecipeState[]>([]);
 
-  const { data } = useRecipes({ baseurl, user: sessionData?.user });
+  const { data } = useRecipes(baseurl);
 
   useEffect(() => {
     if (data) setRecipes(data.recipes);
@@ -45,7 +43,7 @@ export function MyRecipe() {
             </p>
           </EmptyContent>
 
-          <EmptyRedirectButton redirect="/recipes/registrate">
+          <EmptyRedirectButton redirect="/registrate">
             <Plus className="size-5.5" />
             레시피 등록하기
           </EmptyRedirectButton>

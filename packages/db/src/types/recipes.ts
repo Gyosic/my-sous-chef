@@ -81,8 +81,8 @@ export const recipeSchema = z.object({
   share: z
     .boolean()
     .default(false)
-    .meta({ name: "공개여부", type: "boolean", default: false }),
-  source: z.enum(RECIPE_SOURCE),
+    .meta({ name: "공개여부", type: "toggle", default: false }),
+  source: z.enum(RECIPE_SOURCE).default("original"),
   forkedFromId: z.string().optional(),
   dishCategoryId: z.string().optional(),
   cuisineCategoryId: z.string().optional(),

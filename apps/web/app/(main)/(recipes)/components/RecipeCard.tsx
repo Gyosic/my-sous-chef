@@ -8,7 +8,7 @@ export function RecipeCard(recipe: RecipeState) {
   const { setCurrentRecipe } = useRecipeStore();
   const handleClick = () => {
     setCurrentRecipe(recipe);
-    router.push("/recipes/detail");
+    router.push("/detail");
   };
 
   return (
