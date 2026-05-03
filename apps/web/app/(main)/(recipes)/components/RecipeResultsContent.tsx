@@ -1,7 +1,7 @@
 "use client";
 
-import { MyRecipe } from "@/app/(main)/recipes/components/MyRecipe";
-import { RecommendRecipe } from "@/app/(main)/recipes/components/RecommendRecipe";
+import { MyRecipe } from "@/app/(main)/(recipes)/components/MyRecipe";
+import { RecommendRecipe } from "@/app/(main)/(recipes)/components/RecommendRecipe";
 import { Button } from "@repo/ui/components/button";
 import { toast } from "@repo/ui/components/sonner";
 import {

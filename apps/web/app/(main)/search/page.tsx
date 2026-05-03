@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { HomeContent } from "@/app/(main)/components/HomeContent";
+import { HomeContent } from "@/app/(main)/search/components/HomeContent";
 import { api } from "@/config";
 
 export default async function Home() {

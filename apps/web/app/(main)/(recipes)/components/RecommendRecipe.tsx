@@ -1,6 +1,6 @@
 "use client";
 
-import { RecipeCard } from "@/app/(main)/recipes/components/RecipeCard";
+import { RecipeCard } from "@/app/(main)/(recipes)/components/RecipeCard";
 import {
   Empty,
   EmptyContent,

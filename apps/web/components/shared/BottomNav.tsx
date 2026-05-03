@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { Home, BookOpen, Refrigerator } from "lucide-react";
+import { BookOpen, Refrigerator, Search } from "lucide-react";
 import { ButtonGroup } from "@repo/ui/components/button-group";
 import { Button } from "@repo/ui/components/button";
 
@@ -13,8 +13,8 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: "/", icon: Home, label: "홈" },
-  { href: "/recipes", icon: BookOpen, label: "레시피" },
+  { href: "/", icon: BookOpen, label: "레시피" },
+  { href: "/search", icon: Search, label: "검색" },
   { href: "/fridge", icon: Refrigerator, label: "냉장고", authOnly: true },
 ];
 

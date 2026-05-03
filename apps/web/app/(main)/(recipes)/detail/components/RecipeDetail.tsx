@@ -7,12 +7,12 @@ import { Button } from "@repo/ui/components/button";
 import { TopBar } from "@/components/shared/TopBar";
 import { RecipeDetailEmpty } from "./RecipeDetailEmpty";
 import { useRecipeStore } from "@/hooks/use-recipes-store";
-import { ChatBot } from "@/app/(main)/recipes/detail/components/ChatBot";
+import { ChatBot } from "@/app/(main)/(recipes)/detail/components/ChatBot";
 import { useElapsedTime } from "@/hooks/use-elapsed-time";
 import {
   CookingSessionProvider,
   useCookingSessionContext,
-} from "@/app/(main)/recipes/detail/components/CookingSessionProvider";
+} from "@/app/(main)/(recipes)/detail/components/CookingSessionProvider";
 
 interface RecipeDetailProps {
   wsUrl?: string;

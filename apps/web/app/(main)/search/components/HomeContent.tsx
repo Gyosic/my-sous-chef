@@ -1,8 +1,8 @@
 "use client";
 
-import { IngredientInput } from "@/app/(main)/components/IngredientInput";
-import { CategorySection } from "@/app/(main)/components/CategorySection";
-import { RecipeRecommendButton } from "@/app/(main)/components/RecipeRecommendButton";
+import { IngredientInput } from "@/app/(main)/search/components/IngredientInput";
+import { CategorySection } from "@/app/(main)/search/components/CategorySection";
+import { RecipeRecommendButton } from "@/app/(main)/search/components/RecipeRecommendButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
