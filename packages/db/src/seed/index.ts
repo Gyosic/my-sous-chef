@@ -2,6 +2,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "../schema";
 import { CATEGORY_SEED } from "./data";
+import { SHELF_LIFE_SEED } from "./shelf-life";
 
 async function main() {
   const url = process.env.DATABASE_URL;
@@ -11,13 +12,18 @@ async function main() {
   const db = drizzle(client, { schema });
 
   console.log("🌱 Seeding categories...");
-
   await db
     .insert(schema.categories)
     .values(CATEGORY_SEED)
     .onConflictDoNothing({ target: schema.categories.slug });
-
   console.log(`✅ Seeded ${CATEGORY_SEED.length} categories`);
+
+  console.log("🌱 Seeding ingredient shelf life...");
+  await db
+    .insert(schema.ingredientShelfLife)
+    .values(SHELF_LIFE_SEED)
+    .onConflictDoNothing({ target: schema.ingredientShelfLife.name });
+  console.log(`✅ Seeded ${SHELF_LIFE_SEED.length} shelf life entries`);
 
   await client.end();
 }
