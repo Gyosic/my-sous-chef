@@ -3,7 +3,7 @@
 import { BaseurlContext } from "@/components/provider/BaseurlProvider";
 import { RecipeCard } from "@/app/(main)/(recipes)/components/RecipeCard";
 import { useRecipes } from "@/app/(main)/(recipes)/hooks/use-recipes";
-import { RecipeState } from "@/hooks/use-recipes-store";
+import { RecipeState } from "@/lib/store/use-recipes-store";
 import { BookOpen, Plus } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import {

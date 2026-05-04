@@ -1,4 +1,4 @@
-import { RecipeState } from "@/hooks/use-recipes-store";
+import { RecipeState } from "@/lib/store/use-recipes-store";
 import { actionFetch, getLocalStorage } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "next-auth";

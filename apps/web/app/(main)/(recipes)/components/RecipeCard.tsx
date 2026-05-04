@@ -1,7 +1,7 @@
 import { Carrot, ChevronRight, ListOrdered, Users } from "lucide-react";
 import { Badge } from "@repo/ui/components/badge";
 import { useRouter } from "next/navigation";
-import { RecipeState, useRecipeStore } from "@/hooks/use-recipes-store";
+import { RecipeState, useRecipeStore } from "@/lib/store/use-recipes-store";
 
 export function RecipeCard(recipe: RecipeState) {
   const router = useRouter();

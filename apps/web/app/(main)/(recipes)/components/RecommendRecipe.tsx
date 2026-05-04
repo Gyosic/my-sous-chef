@@ -7,7 +7,7 @@ import {
   EmptyIcon,
   EmptyRedirectButton,
 } from "@/components/shared/Empty";
-import { useRecipeStore } from "@/hooks/use-recipes-store";
+import { useRecipeStore } from "@/lib/store/use-recipes-store";
 import { BookOpen, ChefHat } from "lucide-react";
 
 export function RecommendRecipe() {
