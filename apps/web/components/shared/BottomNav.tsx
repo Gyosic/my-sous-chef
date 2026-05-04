@@ -14,19 +14,13 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { href: "/", icon: BookOpen, label: "레시피" },
+  { href: "/fridge", icon: Refrigerator, label: "냉장고" },
   { href: "/search", icon: Search, label: "검색" },
-  { href: "/fridge", icon: Refrigerator, label: "냉장고", authOnly: true },
 ];
 
-interface BottomNavProps {
-  isLoggedIn?: boolean;
-}
-
-export function BottomNav({ isLoggedIn }: BottomNavProps) {
+export function BottomNav() {
   const pathname = usePathname();
   const router = useRouter();
-
-  const visibleItems = navItems.filter((item) => !item.authOnly || isLoggedIn);
 
   const handleClickNavButton = (href: string) => {
     router.push(href);
@@ -34,7 +28,7 @@ export function BottomNav({ isLoggedIn }: BottomNavProps) {
 
   return (
     <ButtonGroup className="flex w-full h-16 shrink-0 items-center justify-around border-t py-1">
-      {visibleItems.map((item) => {
+      {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (
           <Button

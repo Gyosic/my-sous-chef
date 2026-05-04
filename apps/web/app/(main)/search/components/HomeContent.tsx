@@ -3,17 +3,15 @@
 import { IngredientInput } from "@/app/(main)/search/components/IngredientInput";
 import { CategorySection } from "@/app/(main)/search/components/CategorySection";
 import { RecipeRecommendButton } from "@/app/(main)/search/components/RecipeRecommendButton";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { recommendSchema, type RecommendInput } from "@repo/db/types/recommend";
 import { useRouter } from "next/navigation";
-import { useRecipeStore } from "@/hooks/use-recipes-store";
+import { useRecipeStore } from "@/lib/store/use-recipes-store";
 import { toast } from "@repo/ui/components/sonner";
 import { useState } from "react";
 import { Loading } from "@/components/shared/Loading";
 
-const queryClient = new QueryClient();
 interface HomeContentProps {
   userName: string | null;
   baseurl: string;
@@ -60,7 +58,7 @@ export function HomeContent({ userName, baseurl }: HomeContentProps) {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <div className="flex flex-1 flex-col gap-6 px-5 py-6">
         {/* Hero Section */}
         <div className="flex flex-col gap-1.5">
@@ -100,6 +98,6 @@ export function HomeContent({ userName, baseurl }: HomeContentProps) {
           </div>
         </Loading>
       )}
-    </QueryClientProvider>
+    </>
   );
 }

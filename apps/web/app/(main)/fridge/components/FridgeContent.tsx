@@ -4,7 +4,7 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   useIngredients,
-  type Ingredient,
+  type IngredientState,
 } from "@/app/(main)/fridge/hooks/use-ingredients";
 import { IngredientCard } from "@/app/(main)/fridge/components/IngredientCard";
 import { IngredientDrawer } from "@/app/(main)/fridge/components/IngredientDrawer";
@@ -31,10 +31,10 @@ function FridgeInner() {
     removeIngredient,
   } = useIngredients();
 
-  const [editTarget, setEditTarget] = useState<Ingredient | null>(null);
+  const [editTarget, setEditTarget] = useState<IngredientState | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleCardClick = (ingredient: Ingredient) => {
+  const handleCardClick = (ingredient: IngredientState) => {
     setEditTarget(ingredient);
     setDrawerOpen(true);
   };

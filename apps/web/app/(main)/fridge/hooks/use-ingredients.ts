@@ -4,20 +4,26 @@ import { useContext } from "react";
 import { useSession } from "next-auth/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BaseurlContext } from "@/components/provider/BaseurlProvider";
-import { actionFetch } from "@/lib/api";
+import { actionFetch, getLocalStorage, setLocalStorage } from "@/lib/api";
 import { toast } from "@repo/ui/components/sonner";
-import type { IngredientInput } from "@repo/db/types/ingredients";
+import type {
+  IngredientInput,
+  IngredientOutput,
+} from "@repo/db/types/ingredients";
+import { User } from "next-auth";
 
-export interface Ingredient {
-  id: string;
-  userId: string;
-  name: string;
-  amount: number;
-  unit: string;
-  expiration: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
+export type IngredientState = IngredientOutput & { id: string };
+
+const getIngredient = async (baseurl: string, user: User) => {
+  const data = await actionFetch<{ ingredients: IngredientState[] }>(
+    new URL(`/api/ingredients`, baseurl),
+    { headers: { Authorization: `Bearer ${user.access_token}` } },
+  );
+
+  return data;
+};
+
+const QUERY_KEY = ["ingredients"] as const;
 
 export function useIngredients() {
   const { baseurl } = useContext(BaseurlContext);
@@ -25,54 +31,48 @@ export function useIngredients() {
   const queryClient = useQueryClient();
   const token = session?.user.access_token;
 
-  const QUERY_KEY = ["ingredients", token] as const;
-
   const getHeaders = () => ({
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
   });
 
-  const { data: ingredients = [], isLoading } = useQuery<Ingredient[]>({
+  const { data: ingredients = [], isLoading } = useQuery<IngredientState[]>({
     queryKey: QUERY_KEY,
-    queryFn: async () => {
-      const data = await actionFetch(new URL("/api/ingredients", baseurl), {
-        headers: getHeaders(),
-      });
-      return data.ingredients;
-    },
-    enabled: !!token,
+    queryFn: async () =>
+      session
+        ? getIngredient(baseurl, session.user)
+        : getLocalStorage("ingredients") || [],
   });
 
-  const invalidate = () =>
-    queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+  const addMutationFn = async (body: IngredientInput) => {
+    if (session) {
+      const data = await actionFetch<{ ingredient: IngredientState }>(
+        new URL("/api/ingredients", baseurl),
+        {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify(body),
+        },
+      );
 
-  const onError = (err: Error) => {
-    toast.error("요청에 실패했습니다.", { description: err.message });
+      return data.ingredient;
+    } else {
+      const prev = getLocalStorage("ingredients") || [];
+      const cur = { ...body, id: crypto.randomUUID() };
+      setLocalStorage("ingredients", [...prev, cur]);
+
+      return cur;
+    }
   };
-
-  const addMutation = useMutation({
-    mutationFn: async (body: IngredientInput) => {
-      const data = await actionFetch(new URL("/api/ingredients", baseurl), {
-        method: "POST",
-        headers: getHeaders(),
-        body: JSON.stringify(body),
-      });
-
-      return data.ingredient as Ingredient;
-    },
-    onSuccess: invalidate,
-    onError,
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async ({
-      id,
-      body,
-    }: {
-      id: string;
-      body: Partial<IngredientInput>;
-    }) => {
-      const data = await actionFetch(
+  const updateMutationFn = async ({
+    id,
+    body,
+  }: {
+    id: string;
+    body: Partial<IngredientInput>;
+  }) => {
+    if (session) {
+      const data = await actionFetch<{ ingredient: IngredientState }>(
         new URL(`/api/ingredients/${id}`, baseurl),
         {
           method: "PATCH",
@@ -81,22 +81,59 @@ export function useIngredients() {
         },
       );
 
-      return data.ingredient as Ingredient;
-    },
-    onSuccess: invalidate,
-    onError,
-  });
+      return data.ingredient as IngredientState;
+    } else {
+      const prev = getLocalStorage("ingredients") || [];
 
-  const removeMutation = useMutation({
-    mutationFn: async (id: string) => {
+      setLocalStorage(
+        "ingredients",
+        prev.map((p: IngredientState) => (p.id === id ? { ...body, id } : p)),
+      );
+
+      return { id, ...body };
+    }
+  };
+  const removeMutationFn = async (id: string) => {
+    if (session) {
       await actionFetch(new URL(`/api/ingredients/${id}`, baseurl), {
         method: "DELETE",
         headers: getHeaders(),
       });
 
       return id;
-    },
-    onSuccess: invalidate,
+    } else {
+      const prev = getLocalStorage("ingredients") || [];
+
+      setLocalStorage(
+        "ingredients",
+        prev.filter((p: IngredientState) => p.id !== id),
+      );
+
+      return id;
+    }
+  };
+  const onSuccess = () =>
+    queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+
+  const onError = (err: Error) => {
+    toast.error("요청에 실패했습니다.", { description: err.message });
+  };
+
+  const addMutation = useMutation({
+    mutationFn: addMutationFn,
+    onSuccess,
+    onError,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: updateMutationFn,
+    onSuccess,
+    onError,
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: removeMutationFn,
+    onSuccess,
     onError,
   });
 

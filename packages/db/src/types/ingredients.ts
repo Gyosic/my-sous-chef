@@ -13,6 +13,12 @@ export const ingredientSchema = z.object({
     .string("필수입력값 입니다.")
     .min(1, "필수입력값 입니다.")
     .meta({ name: "단위", type: "text", placeholder: "예) 개, g, ml" }),
+  purchaseDate: z.coerce.date().optional().meta({
+    name: "구매일자",
+    type: "date",
+    placeholder: "예) 2026-04-30",
+    required: false,
+  }),
   expiration: z.coerce.date().optional().meta({
     name: "유통기한",
     type: "date",
