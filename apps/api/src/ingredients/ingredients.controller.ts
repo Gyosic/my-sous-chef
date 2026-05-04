@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import { IngredientsService } from "./ingredients.service";
 import {
@@ -21,6 +22,7 @@ import { type AuthUser, JwtAuthGuard } from "@/auth/jwt-auth.guard";
 import { User } from "@/common/decorators/user.decorator";
 import { UsersService } from "@/users/users.service";
 import { ZodValidationPipe } from "@/common/pipes/zod-validation.pipe";
+import { Public } from "@/auth/public.decorator";
 
 @UseGuards(JwtAuthGuard)
 @Controller("/api/ingredients")
@@ -68,5 +70,13 @@ export class IngredientsController {
       await this.usersService.findOneByEmail(user.email);
 
     return this.ingredientsService.remove({ id, userId: userId! });
+  }
+
+  @Public()
+  @Get("shelf-life")
+  async getShelfLife(@Query("name") name: string) {
+    const shelfLife = await this.ingredientsService.findShelfLife(name);
+
+    return shelfLife;
   }
 }

@@ -21,10 +21,10 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@repo/ui/components/drawer";
-import type { Ingredient } from "@/app/(main)/fridge/hooks/use-ingredients";
+import type { IngredientState } from "@/app/(main)/fridge/hooks/use-ingredients";
 
 interface IngredientDrawerProps {
-  ingredient: Ingredient | null;
+  ingredient: IngredientState | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onAdd: (body: IngredientInput) => Promise<unknown>;
@@ -63,6 +63,9 @@ export function IngredientDrawer({
         name: ingredient.name,
         amount: ingredient.amount,
         unit: ingredient.unit,
+        purchaseDate: ingredient.purchaseDate
+          ? new Date(ingredient.purchaseDate)
+          : undefined,
         expiration: ingredient.expiration
           ? new Date(ingredient.expiration)
           : undefined,

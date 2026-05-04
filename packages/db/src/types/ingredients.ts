@@ -16,13 +16,13 @@ export const ingredientSchema = z.object({
   purchaseDate: z.coerce.date().optional().meta({
     name: "구매일자",
     type: "date",
-    placeholder: "예) 2026-04-30",
+    desc: "미입력시 오늘 날짜로 적용",
     required: false,
   }),
   expiration: z.coerce.date().optional().meta({
     name: "소비기한",
     type: "date",
-    placeholder: "예) 2026-04-30",
+    desc: "미입력시 구매일자 기준으로 자동 측정",
     required: false,
   }),
 });

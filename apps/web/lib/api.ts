@@ -7,7 +7,7 @@ const handleError = async (res: Response, msg?: string) => {
 
 export const actionFetch = async <T>(
   url: string | URL | Request,
-  options: RequestInit,
+  options?: RequestInit,
 ): Promise<T> => {
   try {
     const res = await fetch(url, options);

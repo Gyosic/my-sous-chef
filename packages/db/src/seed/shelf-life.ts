@@ -1,6 +1,6 @@
 import type { InferInsertModel } from "drizzle-orm";
 import type { ingredientShelfLife } from "../schema/ingredient-shelf-life";
-import { normalizeName } from "../utils/normalize";
+import { normalizeText } from "../utils/normalize";
 
 type ShelfLifeInsert = InferInsertModel<typeof ingredientShelfLife>;
 
@@ -251,5 +251,5 @@ const RAW: ShelfLifeInsert[] = [
 
 export const SHELF_LIFE_SEED: ShelfLifeInsert[] = RAW.map((item) => ({
   ...item,
-  name: normalizeName(item.name),
+  name: normalizeText(item.name),
 }));

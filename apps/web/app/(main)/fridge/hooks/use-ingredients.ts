@@ -6,10 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BaseurlContext } from "@/components/provider/BaseurlProvider";
 import { actionFetch, getLocalStorage, setLocalStorage } from "@/lib/api";
 import { toast } from "@repo/ui/components/sonner";
-import type {
-  IngredientInput,
-  IngredientOutput,
-} from "@repo/db/types/ingredients";
+import type { IngredientOutput } from "@repo/db/types/ingredients";
 import { User } from "next-auth";
 
 export type IngredientState = IngredientOutput & { id: string };
@@ -44,7 +41,7 @@ export function useIngredients() {
         : getLocalStorage("ingredients") || [],
   });
 
-  const addMutationFn = async (body: IngredientInput) => {
+  const addMutationFn = async (body: IngredientOutput) => {
     if (session) {
       const data = await actionFetch<{ ingredient: IngredientState }>(
         new URL("/api/ingredients", baseurl),
@@ -58,7 +55,34 @@ export function useIngredients() {
       return data.ingredient;
     } else {
       const prev = getLocalStorage("ingredients") || [];
-      const cur = { ...body, id: crypto.randomUUID() };
+      const { purchaseDate, expiration, ...rest } = body;
+      const cur = { ...rest, id: crypto.randomUUID() };
+
+      const today = new Date();
+      const purchaseTime = new Date(purchaseDate || today).getTime();
+
+      Object.assign(cur, {
+        purchaseDate:
+          purchaseDate?.toISOString().substring(0, 10) ??
+          new Date(purchaseTime).toISOString().substring(0, 10),
+      });
+
+      if (!expiration) {
+        const shelfLife = await actionFetch<number>(
+          new URL(`/api/ingredients/shelf-life?name=${body.name}`, baseurl),
+        );
+        const exirationTime =
+          purchaseTime + (shelfLife || 0) * 24 * 60 * 60 * 1000;
+
+        Object.assign(cur, {
+          expiration: new Date(exirationTime).toISOString().substring(0, 10),
+        });
+      } else {
+        Object.assign(cur, {
+          expiration: expiration.toISOString().substring(0, 10),
+        });
+      }
+
       setLocalStorage("ingredients", [...prev, cur]);
 
       return cur;
@@ -69,7 +93,7 @@ export function useIngredients() {
     body,
   }: {
     id: string;
-    body: Partial<IngredientInput>;
+    body: Partial<IngredientOutput>;
   }) => {
     if (session) {
       const data = await actionFetch<{ ingredient: IngredientState }>(
@@ -85,9 +109,40 @@ export function useIngredients() {
     } else {
       const prev = getLocalStorage("ingredients") || [];
 
+      const { purchaseDate, expiration, ...rest } = body;
+      const cur = { ...rest, id };
+
+      const today = new Date();
+      const purchaseTime = new Date(purchaseDate || today).getTime();
+
+      Object.assign(cur, {
+        purchaseDate:
+          purchaseDate?.toISOString().substring(0, 10) ??
+          new Date(purchaseTime).toISOString().substring(0, 10),
+      });
+
+      if (!expiration) {
+        const shelfLife = await actionFetch<number>(
+          new URL(
+            `/api/ingredients/shelf-life?name=${body.name || prev.name}`,
+            baseurl,
+          ),
+        );
+
+        const exirationTime =
+          purchaseTime + (shelfLife || 0) * 24 * 60 * 60 * 1000;
+
+        Object.assign(cur, {
+          expiration: new Date(exirationTime).toISOString().substring(0, 10),
+        });
+      } else
+        Object.assign(cur, {
+          expiration: new Date(expiration).toISOString().substring(0, 10),
+        });
+
       setLocalStorage(
         "ingredients",
-        prev.map((p: IngredientState) => (p.id === id ? { ...body, id } : p)),
+        prev.map((p: IngredientState) => (p.id === id ? cur : p)),
       );
 
       return { id, ...body };
@@ -137,10 +192,10 @@ export function useIngredients() {
     onError,
   });
 
-  const addIngredient = (body: IngredientInput) =>
+  const addIngredient = (body: IngredientOutput) =>
     addMutation.mutateAsync(body);
 
-  const updateIngredient = (id: string, body: Partial<IngredientInput>) =>
+  const updateIngredient = (id: string, body: Partial<IngredientOutput>) =>
     updateMutation.mutateAsync({ id, body });
 
   const removeIngredient = (id: string) => removeMutation.mutateAsync(id);
