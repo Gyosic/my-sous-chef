@@ -36,7 +36,7 @@ export function IngredientCard({ ingredient, onClick }: IngredientCardProps) {
           {expiryStatus === "expired" && (
             <Badge className="bg-red-100 text-red-600 text-[11px] py-0.5">
               <AlertTriangle className="size-3" />
-              유통기한 만료
+              소비기한 만료
             </Badge>
           )}
           {expiryStatus === "soon" && (

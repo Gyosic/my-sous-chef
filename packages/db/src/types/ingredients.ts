@@ -20,7 +20,7 @@ export const ingredientSchema = z.object({
     required: false,
   }),
   expiration: z.coerce.date().optional().meta({
-    name: "유통기한",
+    name: "소비기한",
     type: "date",
     placeholder: "예) 2026-04-30",
     required: false,
