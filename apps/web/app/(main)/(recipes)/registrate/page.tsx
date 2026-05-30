@@ -1,5 +1,10 @@
 import { RecipeRegistrate } from "@/app/(main)/(recipes)/registrate/components/RecipeRegistrate";
+import { Suspense } from "react";
 
-export default async function RecipeRegistratePage() {
-  return <RecipeRegistrate />;
+export default function RecipeRegistratePage() {
+  return (
+    <Suspense>
+      <RecipeRegistrate />
+    </Suspense>
+  );
 }

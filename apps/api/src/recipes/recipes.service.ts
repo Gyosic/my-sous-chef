@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { type CreateRecipeDto } from "./dto/create-recipe.dto";
 import { type UpdateRecipeDto } from "./dto/update-recipe.dto";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
@@ -95,15 +95,39 @@ export class RecipesService {
     return { recipes, nextCursor };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} recipe`;
+  async update(id: string, userId: string, data: UpdateRecipeDto) {
+    const [recipe] = await this.db
+      .update(schema.recipes)
+      .set({ ...data, updatedAt: new Date() })
+      .where(and(eq(schema.recipes.id, id), eq(schema.recipes.userId, userId)))
+      .returning();
+
+    if (!recipe) throw new NotFoundException("레시피를 찾을 수 없습니다.");
+
+    return { recipe };
   }
 
-  update(id: number, updateRecipeDto: UpdateRecipeDto) {
-    return `This action updates a #${id} recipe`;
+  async remove(id: string, userId: string) {
+    const [recipe] = await this.db
+      .delete(schema.recipes)
+      .where(and(eq(schema.recipes.id, id), eq(schema.recipes.userId, userId)))
+      .returning();
+
+    if (!recipe) throw new NotFoundException("레시피를 찾을 수 없습니다.");
+
+    return { recipe };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} recipe`;
+  async sync(userId: string, recipes: CreateRecipeDto[]) {
+    if (recipes.length === 0) return { recipes: [] };
+
+    const inserted = await this.db
+      .insert(schema.recipes)
+      .values(
+        recipes.map((r) => ({ ...r, userId, source: "original" as const })),
+      )
+      .returning();
+
+    return { recipes: inserted };
   }
 }

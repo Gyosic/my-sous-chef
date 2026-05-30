@@ -11,7 +11,7 @@ import {
 } from "@nestjs/common";
 import { RecipesService } from "./recipes.service";
 import { createRecipeDto, type CreateRecipeDto } from "./dto/create-recipe.dto";
-import { type UpdateRecipeDto } from "./dto/update-recipe.dto";
+import { updateRecipeDto, type UpdateRecipeDto } from "./dto/update-recipe.dto";
 import { type AuthUser, JwtAuthGuard } from "@/auth/jwt-auth.guard";
 import { Public } from "@/auth/public.decorator";
 import { User } from "@/common/decorators/user.decorator";
@@ -66,18 +66,37 @@ export class RecipesController {
     });
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.recipesService.findOne(+id);
+  @Post("sync")
+  async sync(
+    @User() user: AuthUser,
+    @Body() body: { recipes: CreateRecipeDto[] },
+  ) {
+    const { user: { id: userId } = {} } = await this.userService.findOneByEmail(
+      user.email,
+    );
+
+    return this.recipesService.sync(userId!, body.recipes);
   }
 
   @Patch(":id")
-  update(@Param("id") id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    return this.recipesService.update(+id, updateRecipeDto);
+  async update(
+    @Param("id") id: string,
+    @User() user: AuthUser,
+    @Body(new ZodValidationPipe(updateRecipeDto)) body: UpdateRecipeDto,
+  ) {
+    const { user: { id: userId } = {} } = await this.userService.findOneByEmail(
+      user.email,
+    );
+
+    return this.recipesService.update(id, userId!, body);
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.recipesService.remove(+id);
+  async remove(@Param("id") id: string, @User() user: AuthUser) {
+    const { user: { id: userId } = {} } = await this.userService.findOneByEmail(
+      user.email,
+    );
+
+    return this.recipesService.remove(id, userId!);
   }
 }
