@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import { RecipesService } from "./recipes.service";
 import { createRecipeDto, type CreateRecipeDto } from "./dto/create-recipe.dto";
 import { type UpdateRecipeDto } from "./dto/update-recipe.dto";
 import { type AuthUser, JwtAuthGuard } from "@/auth/jwt-auth.guard";
+import { Public } from "@/auth/public.decorator";
 import { User } from "@/common/decorators/user.decorator";
 import { UsersService } from "@/users/users.service";
 import { ZodValidationPipe } from "@/common/pipes/zod-validation.pipe";
@@ -48,6 +50,20 @@ export class RecipesController {
 
     const data = await this.recipesService.findAll({ userId: userId! });
     return data;
+  }
+
+  @Public()
+  @Get("public")
+  findPublic(
+    @Query("search") search?: string,
+    @Query("cursor") cursor?: string,
+    @Query("limit") limit?: string,
+  ) {
+    return this.recipesService.findPublic({
+      search,
+      cursor,
+      limit: limit ? parseInt(limit, 10) : 10,
+    });
   }
 
   @Get(":id")

@@ -1,10 +1,5 @@
-import { auth } from "@/lib/auth";
-import { HomeContent } from "@/app/(main)/search/components/HomeContent";
-import { api } from "@/config";
+import { SearchContent } from "./components/SearchContent";
 
-export default async function Home() {
-  const session = await auth();
-  const userName = session?.user?.name ?? null;
-
-  return <HomeContent userName={userName} baseurl={api.baseurl} />;
+export default function SearchPage() {
+  return <SearchContent />;
 }
