@@ -12,7 +12,8 @@ export interface PublicRecipe {
   servings: number | null;
   like: number;
   createdAt: string;
-  author: { name: string | null; image: string | null };
+  authorName: string | null;
+  authorImage: string | null;
 }
 
 interface PublicRecipesResponse {

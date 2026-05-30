@@ -64,9 +64,9 @@ export function RecipeRegistrate() {
     mutationFn: async (inputs: RecipeInput) => {
       if (sessionData) {
         if (isEdit) {
-          await actionFetch(new URL(`/api/recipes/${editId}`, baseurl), {
+          await actionFetch(new URL("/api/recipes", baseurl), {
             method: "PATCH",
-            body: JSON.stringify(inputs),
+            body: JSON.stringify({ ...inputs, id: editId }),
             headers: {
               Authorization: `Bearer ${sessionData.user.access_token}`,
               "Content-Type": "application/json",

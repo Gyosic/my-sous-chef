@@ -50,7 +50,7 @@ export const recipeSchema = z.object({
     type: "textarea",
     placeholder: "레시피에 대한 간단 설명을 입력하세요",
   }),
-  units: z.array(unitSchema).optional().meta({
+  units: z.array(unitSchema).nullish().meta({
     name: "계량단위",
     type: "nested",
     nestedSchema: unitSchema,
@@ -83,9 +83,9 @@ export const recipeSchema = z.object({
     .default(false)
     .meta({ name: "공개여부", type: "toggle", default: false }),
   source: z.enum(RECIPE_SOURCE).default("original"),
-  forkedFromId: z.string().optional(),
-  dishCategoryId: z.string().optional(),
-  cuisineCategoryId: z.string().optional(),
+  forkedFromId: z.string().nullish(),
+  dishCategoryId: z.string().nullish(),
+  cuisineCategoryId: z.string().nullish(),
 });
 
 export type RecipeInput = z.input<typeof recipeSchema>;

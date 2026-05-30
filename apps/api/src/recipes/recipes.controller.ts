@@ -78,9 +78,8 @@ export class RecipesController {
     return this.recipesService.sync(userId!, body.recipes);
   }
 
-  @Patch(":id")
+  @Patch()
   async update(
-    @Param("id") id: string,
     @User() user: AuthUser,
     @Body(new ZodValidationPipe(updateRecipeDto)) body: UpdateRecipeDto,
   ) {
@@ -88,7 +87,7 @@ export class RecipesController {
       user.email,
     );
 
-    return this.recipesService.update(id, userId!, body);
+    return this.recipesService.update(body.id, userId!, body);
   }
 
   @Delete(":id")

@@ -34,7 +34,7 @@ export function PublicRecipeCard({ recipe }: { recipe: PublicRecipe }) {
       {/* 하단: 작성자 + 뱃지 */}
       <div className="flex items-center justify-between gap-2">
         <span className="truncate text-[13px] text-neutral-400">
-          {recipe.author.name ?? "익명"}
+          {recipe.authorName ?? "익명"}
         </span>
         <div className="flex shrink-0 gap-1.5">
           <span className="rounded-full bg-green-50 px-2.5 py-1 text-[12px] font-medium text-green-700">

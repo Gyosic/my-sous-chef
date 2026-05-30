@@ -17,7 +17,7 @@ const getIngredient = async (baseurl: string, user: User) => {
     { headers: { Authorization: `Bearer ${user.access_token}` } },
   );
 
-  return data;
+  return data.ingredients;
 };
 
 const QUERY_KEY = ["ingredients"] as const;
