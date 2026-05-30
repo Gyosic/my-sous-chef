@@ -68,3 +68,18 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+## 5. Devlog
+
+**비자명한 작업은 시작 전과 완료 후에 devlog 스킬로 기록한다.**
+
+대상: 기능 추가, 버그 수정, 리팩토링, 스키마 변경 등
+비대상: 단순 질문, 파일 읽기, 설명 요청
+
+절차:
+
+1. 작업 시작 전 — `/devlog` 스킬로 계획 기록
+2. 작업 완료 후 — 같은 항목에 진행·문제·해결·결과 채움
+
+스킬 정의: `.claude/skills/devlog/SKILL.md`
+로그 위치: `devlog/YYYY-MM-DD.md`

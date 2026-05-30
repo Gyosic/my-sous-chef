@@ -78,6 +78,13 @@
       "when": 1777881330795,
       "tag": "0010_elite_maelstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1778553029387,
+      "tag": "0011_lame_genesis",
+      "breakpoints": true
     }
   ]
 }

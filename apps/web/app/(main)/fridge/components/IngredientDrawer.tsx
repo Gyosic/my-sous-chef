@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ingredientSchema,
   type IngredientInput,
+  type IngredientOutput,
 } from "@repo/db/types/ingredients";
 import {
   FieldModel,
@@ -27,8 +28,8 @@ interface IngredientDrawerProps {
   ingredient: IngredientState | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd: (body: IngredientInput) => Promise<unknown>;
-  onUpdate: (id: string, body: IngredientInput) => Promise<unknown>;
+  onAdd: (body: IngredientOutput) => Promise<unknown>;
+  onUpdate: (id: string, body: Partial<IngredientOutput>) => Promise<unknown>;
   onRemove: (id: string) => Promise<unknown>;
 }
 
@@ -79,13 +80,14 @@ export function IngredientDrawer({
 
   const onSubmit = handleSubmit(
     async (inputs) => {
+      const data = inputs as unknown as IngredientOutput;
       setSubmitting(true);
       try {
         if (isEdit) {
-          await onUpdate(ingredient.id, inputs);
+          await onUpdate(ingredient.id, data);
           toast.success(`${inputs.name}을(를) 수정했습니다.`);
         } else {
-          await onAdd(inputs);
+          await onAdd(data);
           toast.success(`${inputs.name}을(를) 추가했습니다.`);
         }
         onOpenChange(false);

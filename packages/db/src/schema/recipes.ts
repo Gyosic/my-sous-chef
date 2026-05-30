@@ -24,6 +24,7 @@ export const recipes = pgTable("recipes", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id),
+  type: text("type"),
   name: text("name").notNull(),
   description: text("description"),
   steps: json("steps")
